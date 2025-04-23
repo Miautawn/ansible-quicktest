@@ -4,6 +4,7 @@
   connection: local
   gather_facts: no
 
+  # needed for beutiful output callback
   roles:
     - role: townk.beautiful_output
 

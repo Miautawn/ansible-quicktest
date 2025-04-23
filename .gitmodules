@@ -1,0 +1,3 @@
+[submodule "roles/townk.beutiful_output"]
+	path = roles/townk.beutiful_output
+	url = https://github.com/Townk/ansible-beautiful-output.git
