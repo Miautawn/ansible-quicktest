@@ -1,0 +1,4 @@
+---
+- name: "vlc"
+  ansible.builtin.debug:
+    msg: "vlc"

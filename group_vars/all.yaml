@@ -1,0 +1,10 @@
+---
+common_roles:
+  - common_core_terminal
+  - common_multimedia_vlc
+
+desktop_roles:
+  - desktop_core_game
+
+laptop_roles:
+  - laptop_core_bluetooth

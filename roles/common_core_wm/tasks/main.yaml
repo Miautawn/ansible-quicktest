@@ -1,0 +1,4 @@
+---
+- name: "window manager"
+  ansible.builtin.debug:
+    msg: "common window manager"
