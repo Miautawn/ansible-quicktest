@@ -1,0 +1,5 @@
+---
+- name: "{{ ansible_distribution }} | htop | install"
+  community.general.pacman:
+    name: htop
+    state: present

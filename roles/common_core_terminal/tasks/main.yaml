@@ -1,4 +1,0 @@
----
-- name: "terminal"
-  ansible.builtin.debug:
-    msg: "terminal"

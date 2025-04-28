@@ -1,4 +1,0 @@
----
-- name: "game"
-  ansible.builtin.debug:
-    msg: "desktop game"

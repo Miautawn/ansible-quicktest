@@ -1,10 +1,43 @@
 ---
 common_roles:
-  - common_core_terminal
-  - common_multimedia_vlc
+  - common_utils_htop
+
+# Core:
+# Bash - already exists on Arch
+# Flatpak
+
+# Utils
+# Terminal
+# File Manager
+# Browser
+# htop
+# ncdu
+# Neovim
+# Vscode
+
+# Dev:
+# Python:
+  # Pyenv 
+  # Pipx
+  # Poetry
+
+# DE:
+# Window manager
+# Login manager
+# Rofi
+# Some wallpaper utility
+# Composer?
+# powerbar
 
 desktop_roles:
-  - desktop_core_game
+  - desktop_mock
+  # - desktop_core_game
 
 laptop_roles:
-  - laptop_core_bluetooth
+  - laptop_mock
+  # - laptop_core_bluetooth
+
+# Core:
+# powertop
+# bluetooth
+

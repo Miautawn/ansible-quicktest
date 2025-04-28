@@ -1,0 +1,4 @@
+---
+- name: "mock"
+  ansible.builtin.debug:
+    msg: "Hello!"

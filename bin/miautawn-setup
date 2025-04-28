@@ -1,0 +1,129 @@
+#!/bin/bash
+
+set -e # exit immediately on failed commands
+
+################
+# COLOUR CODES #
+################
+NC='\033[0m'
+RED='\033[00;31m'
+GREEN='\033[00;32m'
+BLUE='\033[00;34m'
+LRED='\033[01;31m'
+LGREEN='\033[01;32m'
+LBLUE='\033[01;34m'
+
+#######################
+# IMPORTANT VARIABLES #
+#######################
+SETUP_LOG="$HOME/.miautawn-setup.log"
+SETUP_DIR="$HOME/.miautawn-setup"
+
+
+#############
+# FUNCTIONS #
+#############
+function __log() {
+    case $1 in
+    INFO)
+        echo -e "${LGREEN}$2${NC}"
+        ;;
+
+    DEBUG)
+        echo -e "${LBLUE}$2${NC}"
+        ;;
+
+    ERROR)
+        echo -e "${LRED}$2${NC}"
+        ;;
+    *)
+        echo $2
+    esac
+
+    echo "$1: $2" >> $SETUP_LOG
+}
+
+function __cmd() {
+    echo ">> $1:" >> $SETUP_LOG
+    if eval $1 >> $SETUP_LOG 2>&1; then
+        return 0
+    fi
+    __log ERROR "Something went wrong! Check the logs at $SETUP_LOG"
+    return 1
+}
+
+# TODO
+# 1. check if repo exists and download if it doesn't
+# 2. 
+
+function arch_setup() {
+    __log DEBUG "Updating package index..."
+    __cmd "sudo pacman -Sy --noconfirm"
+
+    # First of all - check neccessary packages are installed:
+    #   * git - obviously for pulling the repo if it doesn't exist
+    #   * ansible - for actually running ansible, duh!
+    #   * python-watchdog - for ansible pretty-output stdout callback
+
+    if ! pacman -Q git >/dev/null 2>&1; then
+        __log DEBUG "Installing Git..."
+        __cmd "sudo pacman -S --noconfirm git"
+    fi
+
+    if ! pacman -Q ansible >/dev/null 2>&1; then
+        __log DEBUG "Installing Ansible..."
+        __cmd "sudo pacman -S --noconfirm ansible"
+    fi
+
+    if ! pacman -Q python-watchdog >/dev/null 2>&1; then
+        __log DEBUG "Installing Python-Watchdog..."
+        __cmd "sudo pacman -S --noconfirm python-watchdog"
+    fi
+}
+
+function detect_os() {
+  if [ -f /etc/os-release ]; then
+    source /etc/os-release
+    echo $ID
+  else
+    echo $(uname -s | tr '[:upper:]' '[:lower:]')
+  fi
+}
+
+########
+# MAIN #
+########
+
+# Create log file if it doesn't exist and clear it
+if ! [ -f $SETUP_LOG ]; then
+    touch $SETUP_LOG
+fi
+> $SETUP_LOG
+
+DETECTED_OS=$(detect_os)
+__log INFO "STEP 1. Running OS setup for: $DETECTED_OS"
+case $DETECTED_OS in
+arch)
+    arch_setup;;
+*)
+    __log ERROR "Unsupported OS: '$DETECTED_OS' \nExiting..."
+    exit 1
+esac
+
+# Download dotfiles repo if it doesn't exist
+if ! [[ -d $SETUP_DIR ]]; then
+    __log DEBUG "Cloning miautawn-setup repo..."
+    __cmd "git clone --recurse-submodules https://github.com/Miautawn/ansible-quicktest $SETUP_DIR"
+    cd $SETUP_DIR
+else
+    __log DEBUG "Updating miautawn-setup repo..."
+    __cmd "git -C $SETUP_DIR pull"
+fi
+
+__log INFO "STEP 2. Running Ansible Playbook..."
+ansible-playbook hello.yaml "$@"
+
+
+
+
+
