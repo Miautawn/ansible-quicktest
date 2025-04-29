@@ -114,14 +114,13 @@ esac
 if ! [[ -d $SETUP_DIR ]]; then
     __log DEBUG "Cloning miautawn-setup repo..."
     __cmd "git clone --recurse-submodules https://github.com/Miautawn/ansible-quicktest $SETUP_DIR"
-    cd $SETUP_DIR
 else
     __log DEBUG "Updating miautawn-setup repo..."
     __cmd "git -C $SETUP_DIR pull"
 fi
 
 __log INFO "STEP 2. Running Ansible Playbook..."
-ansible-playbook hello.yaml "$@"
+ansible-playbook "$SETUP_DIR/hello.yaml" "$@"
 
 
 

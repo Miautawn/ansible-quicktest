@@ -12,6 +12,5 @@ if [ ! $TARGET_EXIT_STATUS -eq 0 ]; then
     exit 1
 fi
 echo "Test script completed successfully."
-# exit 0
 /bin/bash -i
 exit 0

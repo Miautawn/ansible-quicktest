@@ -1,6 +1,8 @@
 ---
 common_roles:
+  - common_core_system
   - common_utils_htop
+  - common_utils_firefox
 
 # Core:
 # Bash - already exists on Arch
@@ -10,12 +12,13 @@ common_roles:
 # Terminal
 # File Manager
 # Browser
-# htop
+# htop - done
 # ncdu
 # Neovim
 # Vscode
 
 # Dev:
+# docker
 # Python:
   # Pyenv 
   # Pipx
