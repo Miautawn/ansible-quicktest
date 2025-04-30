@@ -1,0 +1,8 @@
+---
+- name: "{{ ansible_distribution }} | xorg | Install"
+  community.general.pacman:
+    name: xorg
+    state: present
+  become: true
+
+

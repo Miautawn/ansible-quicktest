@@ -1,12 +1,22 @@
 ---
 common_roles:
+  # Core
   - common_core_system
+  - common_core_xorg
+
+  # Utils
   - common_utils_htop
   - common_utils_firefox
+
+  # Desktop Environment
+  - common_de_lemurs
+  - common_de_herbstluftwm
+
 
 # Core:
 # Bash - already exists on Arch
 # Flatpak
+# xorg
 
 # Utils
 # Terminal
@@ -25,7 +35,8 @@ common_roles:
   # Poetry
 
 # DE:
-# Window manager
+# login manaager - done
+# Window manager - done
 # Login manager
 # Rofi
 # Some wallpaper utility

@@ -1,0 +1,13 @@
+---
+- name: "{{ ansible_distribution }} | lumurs | Install"
+  community.general.pacman:
+    name: lemurs
+    state: present
+  become: true
+
+- name: "{{ ansible_distribution }} | lumurs | Enable Service"
+  ansible.builtin.service:
+    name: lemurs
+    enabled: true
+  become: true
+

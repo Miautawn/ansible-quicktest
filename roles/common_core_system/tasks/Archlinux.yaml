@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_distribution }} | System | Update pacman"
+- name: "{{ ansible_distribution }} | system | Update pacman"
   community.general.pacman:
     update_cache: true
     state: latest
