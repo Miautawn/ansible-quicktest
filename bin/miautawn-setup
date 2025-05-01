@@ -132,7 +132,7 @@ if ! [[ -d $DOTFILES_DIR ]]; then
     __cmd "chezmoi init https://github.com/Miautawn/test-dotfiles.git"
 fi
 __log DEBUG "Updating & Applying System Configuration..."
-chezmoi update -v
+chezmoi update
 
 
 

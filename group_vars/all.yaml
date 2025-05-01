@@ -8,6 +8,7 @@ common_roles:
   - common_utils_htop
   - common_utils_firefox
   - common_utils_xterm # purely for development reasons
+  - common_utils_nvim
 
   # Desktop Environment
   - common_de_lemurs

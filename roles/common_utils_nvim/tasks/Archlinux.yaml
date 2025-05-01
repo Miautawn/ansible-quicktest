@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_distribution }} | nvim | Install"
+  community.general.pacman:
+    name: neovim
+    state: present
+  become: true
