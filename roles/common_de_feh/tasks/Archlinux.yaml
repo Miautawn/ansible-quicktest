@@ -1,0 +1,7 @@
+---
+- name: "{{ ansible_distribution }} | feh | Install"
+  community.general.pacman:
+    name: feh
+    state: present
+  become: true
+

@@ -13,6 +13,7 @@ common_roles:
   # Desktop Environment
   - common_de_lemurs
   - common_de_herbstluftwm
+  - common_de_feh
 
 
 # Core:
