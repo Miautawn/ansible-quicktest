@@ -18,7 +18,7 @@ LBLUE='\033[01;34m'
 #######################
 SETUP_LOG="$HOME/.miautawn-setup.log"
 SETUP_DIR="$HOME/.miautawn-setup"
-
+DOTFILES_DIR="$HOME/.local/share/chezmoi"
 
 #############
 # FUNCTIONS #
@@ -61,9 +61,10 @@ function arch_setup() {
     __cmd "sudo pacman -Sy --noconfirm"
 
     # First of all - check neccessary packages are installed:
-    #   * git - obviously for pulling the repo if it doesn't exist
+    #   * git - obviously for pulling the repos if they don't exist
     #   * ansible - for actually running ansible, duh!
     #   * python-watchdog - for ansible pretty-output stdout callback
+    #   * chezmoi - for managing dotfiles (fyi: this could be installed through ansible)
 
     if ! pacman -Q git >/dev/null 2>&1; then
         __log DEBUG "Installing Git..."
@@ -78,6 +79,11 @@ function arch_setup() {
     if ! pacman -Q python-watchdog >/dev/null 2>&1; then
         __log DEBUG "Installing Python-Watchdog..."
         __cmd "sudo pacman -S --noconfirm python-watchdog"
+    fi
+
+    if ! pacman -Q chezmoi >/dev/null 2>&1; then
+        __log DEBUG "Installing Chezmoi..."
+        __cmd "sudo pacman -S --noconfirm chezmoi"
     fi
 }
 
@@ -110,7 +116,7 @@ arch)
     exit 1
 esac
 
-# Download dotfiles repo if it doesn't exist
+__log INFO "STEP 2. Replicating System Setup..."
 if ! [[ -d $SETUP_DIR ]]; then
     __log DEBUG "Cloning miautawn-setup repo..."
     __cmd "git clone --recurse-submodules https://github.com/Miautawn/ansible-quicktest $SETUP_DIR"
@@ -118,10 +124,15 @@ else
     __log DEBUG "Updating miautawn-setup repo..."
     __cmd "git -C $SETUP_DIR pull"
 fi
-
-__log INFO "STEP 2. Running Ansible Playbook..."
 ansible-playbook "$SETUP_DIR/hello.yaml" "$@"
 
+__log INFO "STEP 3. Replicating System Configuration..."
+if ! [[ -d $DOTFILES_DIR ]]; then
+    __log DEBUG "Cloning miautawn-dotfiles repo..."
+    __cmd "chezmoi init https://github.com/Miautawn/test-dotfiles.git"
+fi
+__log DEBUG "Updating & Applying System Configuration..."
+chezmoi update -v
 
 
 
