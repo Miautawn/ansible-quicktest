@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_distribution }} | yazi | Install"
+  community.general.pacman:
+    name: yazi
+    state: present
+  become: true
