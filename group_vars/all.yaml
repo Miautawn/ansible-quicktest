@@ -10,6 +10,7 @@ common_roles:
   - common_utils_xterm # purely for development reasons
   - common_utils_nvim
   - common_utils_btop
+  - common_utils_ncdu
   - common_utils_yazi
 
   # Desktop Environment

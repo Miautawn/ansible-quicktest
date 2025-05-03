@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_distribution }} | ncdu | Install"
+  community.general.pacman:
+    name: ncdu
+    state: present
+  become: true

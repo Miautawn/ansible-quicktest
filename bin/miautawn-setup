@@ -18,7 +18,7 @@ LBLUE='\033[01;34m'
 #######################
 SETUP_LOG="$HOME/.miautawn-setup.log"
 SETUP_DIR="$HOME/.miautawn-setup"
-DOTFILES_DIR="$HOME/.local/share/chezmoi"
+USER_SCRIPTS_DIR="$HOME/.local/bin"
 
 #############
 # FUNCTIONS #
@@ -127,12 +127,24 @@ fi
 ansible-playbook "$SETUP_DIR/hello.yaml" "$@"
 
 __log INFO "STEP 3. Replicating System Configuration..."
-if ! [[ -d $DOTFILES_DIR ]]; then
+if ! [[ -d $(chezmoi source-path) ]]; then
     __log DEBUG "Cloning miautawn-dotfiles repo..."
     __cmd "chezmoi init https://github.com/Miautawn/test-dotfiles.git"
 fi
 __log DEBUG "Updating & Applying System Configuration..."
 chezmoi update
+
+__log INFO "STEP 4. Publishing Update Script..."
+__log DEBUG "Symlinking 'miautawn-setup' to ~/.local/bin..."
+__cmd "mkdir -p $USER_SCRIPTS_DIR"
+__cmd "ln -sf $SETUP_DIR/bin/miautawn-setup $USER_SCRIPTS_DIR/miautawn-setup"
+if ! [[ ":$PATH:" == *":$USER_SCRIPTS_DIR:"* ]]; then
+    __log DEBUG "You should consider adding $USER_SCRIPTS_DIR to your PATH!"
+fi
+
+__log INFO "All Done!"
+
+
 
 
 
