@@ -1,0 +1,7 @@
+---
+- name: "{{ ansible_distribution }} | rofi | Install"
+  community.general.pacman:
+    name: rofi
+    state: present
+  become: true
+

@@ -1,0 +1,33 @@
+---
+- name: "{{ ansible_distribution }} | python | pyenv | Install"
+  community.general.pacman:
+    name: pyenv
+    state: present
+  become: true
+
+# install python build dependencies
+- name: "{{ ansible_distribution }} | python | pyenv | Install python build dependencies"
+  community.general.pacman:
+    name:
+      - base-devel
+      - openssl
+      - zlib
+      - xz
+      - tk
+    state: present
+  become: true
+
+# set global as system
+
+# we don't need to ensure path, since it's ~/.local/bin by default
+# and our dotfiles for bashrc already add it to path by default
+- name: "{{ ansible_distribution }} | python | pipx | Install"
+  community.general.pacman:
+    name: python-pipx
+    state: present
+  become: true
+
+- name: "{{ ansible_distribution }} | python | poetry | Install"
+  community.general.pipx:
+    name: poetry
+    state: present

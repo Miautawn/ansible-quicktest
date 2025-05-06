@@ -16,10 +16,13 @@ LBLUE='\033[01;34m'
 #######################
 # IMPORTANT VARIABLES #
 #######################
-SETUP_LOG="$HOME/.miautawn-setup.log"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config/}/miautawn-setup"
+LOG_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/miautawn-setup"
 SETUP_DIR="$HOME/.miautawn-setup"
 USER_SCRIPTS_DIR="$HOME/.local/bin"
 
+SETUP_CONFIG="$CONFIG_DIR/settings.conf"
+SETUP_LOG="$LOG_DIR/log"
 #############
 # FUNCTIONS #
 #############
@@ -51,10 +54,6 @@ function __cmd() {
     __log ERROR "Something went wrong! Check the logs at $SETUP_LOG"
     return 1
 }
-
-# TODO
-# 1. check if repo exists and download if it doesn't
-# 2. 
 
 function arch_setup() {
     __log DEBUG "Updating package index..."
@@ -88,7 +87,7 @@ function arch_setup() {
 }
 
 function detect_os() {
-  if [ -f /etc/os-release ]; then
+  if [[ -f /etc/os-release ]]; then
     source /etc/os-release
     echo $ID
   else
@@ -101,10 +100,49 @@ function detect_os() {
 ########
 
 # Create log file if it doesn't exist and clear it
-if ! [ -f $SETUP_LOG ]; then
+if ! [[ -f $SETUP_LOG ]]; then
+    mkdir -p $LOG_DIR
     touch $SETUP_LOG
 fi
 > $SETUP_LOG
+
+# Check available configuration
+if ! [[ -f $SETUP_CONFIG ]]; then
+    __cmd "mkdir -p $CONFIG_DIR"
+    __cmd "touch $SETUP_CONFIG"
+fi
+__cmd "source $SETUP_CONFIG"
+
+# Prompt user for system device type if not indicated
+if ! [[ -n $SYSTEM_DEVICE_TYPE ]]; then
+    PS3="Select system device type: "
+    options=("desktop" "laptop")
+    select device_type in "${options[@]}"; do
+        if [[ -n $device_type ]]; then
+            __cmd "echo "SYSTEM_DEVICE_TYPE=$device_type" >> $SETUP_CONFIG"
+            break
+        fi
+        echo "invalid option $REPLY"
+    done
+fi
+
+# Prompt user for system theem if not indicated
+if ! [[ -n $SYSTEM_DEVICE_TYPE ]]; then
+    PS3="Select system theme: "
+    options=("white" "dark")
+    select system_theme in "${options[@]}"; do
+        if [[ -n $device_type ]]; then
+            __cmd "echo "SYSTEM_THEME=$system_theme" >> $SETUP_CONFIG"
+            break
+        fi
+        echo "invalid option $REPLY"
+    done
+fi
+
+# Make user configuration available for child processes
+__cmd "source $SETUP_CONFIG"
+__cmd "export SYSTEM_DEVICE_TYPE"
+__cmd "export SYSTEM_THEME"
 
 DETECTED_OS=$(detect_os)
 __log INFO "STEP 1. Running OS setup for: $DETECTED_OS"
@@ -129,7 +167,7 @@ ansible-playbook "$SETUP_DIR/hello.yaml" "$@"
 __log INFO "STEP 3. Replicating System Configuration..."
 if ! [[ -d $(chezmoi source-path) ]]; then
     __log DEBUG "Cloning miautawn-dotfiles repo..."
-    __cmd "chezmoi init https://github.com/Miautawn/test-dotfiles.git"
+    chezmoi init https://github.com/Miautawn/test-dotfiles.git
 fi
 __log DEBUG "Updating & Applying System Configuration..."
 chezmoi update

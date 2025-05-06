@@ -4,19 +4,25 @@
   connection: local
   gather_facts: yes
 
+  vars:
+    device_type_env: "{{ lookup('env', 'SYSTEM_DEVICE_TYPE') | default(Undefined, true) }}"
+
   # needed for beutiful output callback
   roles:
     - role: townk.beautiful_output
 
-  # You can prompt for device_type or pass it via CLI (-e)
-  vars_prompt:
-    - name: device_type
-      prompt: "Enter device type (e.g., desktop, laptop)"
-      private: false
-      default: "desktop"
-
   pre_tasks:
-    - name: Validate device type
+    - pause:
+        prompt: "Enter device type (one of: desktop, laptop)"
+      register: prompt
+      when: device_type_env is undefined
+
+    - name: "Set 'device_type' fact"
+      set_fact:
+        device_type: "{{ device_type_env | default(prompt.user_input, true) | lower | trim }}"
+      tags: always
+
+    - name: Validate 'device_type'
       assert:
         that: device_type in ['desktop', 'laptop']
         fail_msg: "Invalid device type '{{ device_type }}', specify one of ['desktop', 'laptop']"

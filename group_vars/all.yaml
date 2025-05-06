@@ -13,10 +13,15 @@ common_roles:
   - common_utils_ncdu
   - common_utils_yazi
 
+  # development
+  - common_dev_python
+  - common_dev_gh
+
   # Desktop Environment
   - common_de_lemurs
   - common_de_herbstluftwm
   - common_de_feh
+  - common_de_rofi
 
 
 # Core:
