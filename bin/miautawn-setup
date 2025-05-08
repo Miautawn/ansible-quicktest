@@ -129,7 +129,7 @@ fi
 # Prompt user for system theem if not indicated
 if ! [[ -n $SYSTEM_DEVICE_TYPE ]]; then
     PS3="Select system theme: "
-    options=("white" "dark")
+    options=("stock" "archcraft")
     select system_theme in "${options[@]}"; do
         if [[ -n $device_type ]]; then
             __cmd "echo "SYSTEM_THEME=$system_theme" >> $SETUP_CONFIG"
