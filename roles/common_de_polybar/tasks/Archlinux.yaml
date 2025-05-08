@@ -1,13 +1,7 @@
 ---
 - name: "{{ ansible_distribution }} | polybar | Install"
   community.general.pacman:
-    name: lemurs
+    name: polybar
     state: present
-  become: true
-
-- name: "{{ ansible_distribution }} | polybar | Enable Service"
-  ansible.builtin.service:
-    name: lemurs
-    enabled: true
   become: true
 
