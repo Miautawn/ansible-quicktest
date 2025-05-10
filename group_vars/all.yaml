@@ -23,6 +23,7 @@ common_roles:
   - common_de_feh
   - common_de_rofi
   - common_de_polybar
+  - commons_de_fonts
 
 
 # Core:

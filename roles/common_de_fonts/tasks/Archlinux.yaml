@@ -1,0 +1,15 @@
+---
+- name: "{{ ansible_distribution }} | fonts | 0xProto | Install"
+  community.general.pacman:
+    name: ttf-0xproto-nerd
+    state: present
+  become: true
+
+# - name: "{{ ansible_distribution }} | fonts | 0xProto | Install"
+#   community.general.pacman:
+#     name: feh
+#     state: present
+#   become: true
+
+
+
