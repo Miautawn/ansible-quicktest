@@ -1,13 +1,13 @@
 ---
-- name: "{{ ansible_distribution }} | fonts | 0xProto Nerd | Install"
+- name: "{{ ansible_distribution }} | lockscreen | xss-lock | Install"
   community.general.pacman:
-    name: ttf-0xproto-nerd
+    name: xss-lock
     state: present
   become: true
 
-- name: "{{ ansible_distribution }} | fonts | Nerd Symbols | Install"
+- name: "{{ ansible_distribution }} | lockscreen | xsecurelock | Install"
   community.general.pacman:
-    name: ttf-nerd-fonts-symbols
+    name: xsecurelock
     state: present
   become: true
 
