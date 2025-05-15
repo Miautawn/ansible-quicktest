@@ -3,6 +3,7 @@ common_roles:
   # Core
   - common_core_system
   - common_core_xorg
+  - common_core_polkit
 
   # Utils
   - common_utils_htop

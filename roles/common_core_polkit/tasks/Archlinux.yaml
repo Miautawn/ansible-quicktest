@@ -1,0 +1,8 @@
+---
+- name: "{{ ansible_distribution }} | polkit | Install"
+  community.general.pacman:
+    name: polkit
+    state: present
+  become: true
+
+
