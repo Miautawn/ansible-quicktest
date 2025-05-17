@@ -63,7 +63,7 @@ desktop_roles:
   # - desktop_core_game
 
 laptop_roles:
-  - laptop_mock
+  - laptop_core_bluetooth
   # - laptop_core_bluetooth
 
 # Core:

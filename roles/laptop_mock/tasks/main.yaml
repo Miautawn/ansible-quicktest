@@ -1,4 +1,0 @@
----
-- name: "bluetooth"
-  ansible.builtin.debug:
-    msg: "laptop bluetooth"

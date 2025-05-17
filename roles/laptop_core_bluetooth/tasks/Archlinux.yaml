@@ -1,0 +1,18 @@
+---
+- name: "{{ ansible_distribution }} | bluetooth | bluez | Install"
+  community.general.pacman:
+    name: bluez
+    state: present
+  become: true
+
+- name: "{{ ansible_distribution }} | bluetooth | bluez-utils | Install"
+  community.general.pacman:
+    name: bluez-utils
+    state: present
+  become: true
+
+- name: "{{ ansible_  distribution }} | bluetooth | bluetui | Install"
+  community.general.pacman:
+    name: bluetui
+    state: present
+  become: true
