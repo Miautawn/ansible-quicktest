@@ -1,0 +1,12 @@
+---
+- name: "{{ ansible_distribution }} | wifi | iwd | Install"
+  community.general.pacman:
+    name: iwd
+    state: present
+  become: true
+
+- name: "{{ ansible_distribution }} | wifi | impala | Install"
+  community.general.pacman:
+    name: impala
+    state: present
+  become: true

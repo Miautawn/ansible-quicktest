@@ -64,6 +64,7 @@ desktop_roles:
 
 laptop_roles:
   - laptop_core_bluetooth
+  - laptop_core_wifi
   # - laptop_core_bluetooth
 
 # Core:
