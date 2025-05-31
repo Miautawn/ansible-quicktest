@@ -1,0 +1,12 @@
+---
+- name: "{{ ansible_distribution }} | powertop | Install"
+  community.general.pacman:
+    name: powertop
+    state: present
+  become: true
+
+- name: "{{ ansible_distribution }} | powertop | Install"
+  community.general.pacman:
+    name: impala
+    state: present
+  become: true
