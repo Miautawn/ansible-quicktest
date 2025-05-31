@@ -1,12 +1,12 @@
 ## Usage
 You can donwload and start the installer script as such:
 ```
-curl -L https://raw.githubusercontent.com/Miautawn/ansible-quicktest/refs/heads/master/bin/miautawn-setup | bash -s
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Miautawn/ansible-quicktest/master/bin/miautawn-setup)"
 ```
 
 Optionally you can specify only specific tags to install as such:
 ```
-curl -L https://raw.githubusercontent.com/Miautawn/ansible-quicktest/refs/heads/master/bin/miautawn-setup | bash -s -- --tags=desktop
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Miautawn/ansible-quicktest/master/bin/miautawn-setup)" -- --tags core,common,utils
 ```
 
 ## Tests
