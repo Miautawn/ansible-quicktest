@@ -23,6 +23,7 @@ common_roles:
   - common_de_herbstluftwm
   - common_de_feh
   - common_de_rofi
+  - common_de_kitty
   - common_de_polybar
   - common_de_lockscreen
   - common_de_fonts
