@@ -13,6 +13,8 @@ common_roles:
   - common_utils_btop
   - common_utils_ncdu
   - common_utils_yazi
+  - common_utils_fd
+  - common_utils_ripgrep
 
   # development
   - common_dev_python
