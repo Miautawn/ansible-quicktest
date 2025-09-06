@@ -162,7 +162,7 @@ else
     __log DEBUG "Updating miautawn-setup repo..."
     __cmd "git -C $SETUP_DIR pull"
 fi
-ansible-playbook "$SETUP_DIR/hello.yaml" "$@"
+sudo ansible-playbook "$SETUP_DIR/hello.yaml" "$@"
 
 __log INFO "STEP 3. Replicating System Configuration..."
 if ! [[ -d $(chezmoi source-path) ]]; then
