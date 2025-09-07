@@ -1,0 +1,18 @@
+---
+- name: "{{ ansible_distribution }} | gpu | mesa | Install"
+  community.general.pacman:
+    name: mesa
+    state: present
+  become: true
+
+- name: "{{ ansible_distribution }} | gpu | xf86-video-amdgpu | Install"
+  community.general.pacman:
+    name: xf86-video-amdgpu
+    state: present
+  become: true
+
+- name: "{{ ansible_distribution }} | gpu | vulkan-radeon | Install"
+  community.general.pacman:
+    name: vulkan-radeon
+    state: present
+  become: true

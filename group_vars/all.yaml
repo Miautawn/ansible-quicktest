@@ -21,6 +21,7 @@ common_roles:
   - common_dev_gh
 
   # Desktop Environment
+  - common_de_pipewire
   - common_de_lemurs
   - common_de_herbstluftwm
   - common_de_feh
@@ -29,6 +30,7 @@ common_roles:
   - common_de_polybar
   - common_de_lockscreen
   - common_de_fonts
+  - common_de_gpu
 
 desktop_roles:
   - desktop_mock

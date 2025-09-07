@@ -1,0 +1,30 @@
+---
+- name: "{{ ansible_distribution }} | pipewire | Install"
+  community.general.pacman:
+    name: pipewire
+    state: present
+  become: true
+
+- name: "{{ ansible_distribution }} | pipewire-audio | Install"
+  community.general.pacman:
+    name: pipewire-audio 
+    state: present
+  become: true
+
+- name: "{{ ansible_distribution }} | pipewire-alsa | Install"
+  community.general.pacman:
+    name: pipewire-alsa 
+    state: present
+  become: true
+
+- name: "{{ ansible_distribution }} | pipewire-pulse | Install"
+  community.general.pacman:
+    name: pipewire-pulse
+    state: present
+  become: true
+
+- name: "{{ ansible_distribution }} | pipewire-jack | Install"
+  community.general.pacman:
+    name: pipewire-jack
+    state: present
+  become: true
