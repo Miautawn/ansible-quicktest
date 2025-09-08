@@ -7,8 +7,6 @@ common_roles:
 
   # Utils
   - common_utils_htop
-  - common_utils_firefox
-  - common_utils_xterm # purely for development reasons
   - common_utils_nvim
   - common_utils_btop
   - common_utils_ncdu
@@ -21,16 +19,18 @@ common_roles:
   - common_dev_gh
 
   # Desktop Environment
+  - common_de_fonts
+  - common_de_gpu
   - common_de_pipewire
   - common_de_lemurs
   - common_de_herbstluftwm
+  - common_de_lockscreen
   - common_de_feh
   - common_de_rofi
+  - common_de_xterm # purely for development reasons
   - common_de_kitty
   - common_de_polybar
-  - common_de_lockscreen
-  - common_de_fonts
-  - common_de_gpu
+  - common_de_firefox
 
 desktop_roles:
   - desktop_mock
