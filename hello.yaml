@@ -48,6 +48,7 @@
           UNKNOWN
           {%- endif -%}
       tags: always
+      no_log: true
 
     - name: "Print System Info"
       ansible.builtin.debug:
