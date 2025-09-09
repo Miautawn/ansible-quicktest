@@ -51,7 +51,7 @@
 
     - name: "Print System Info"
       ansible.builtin.debug:
-        msg: OS: {{ ansible_distribution }}, GPU: {{ gpu_vendor }}
+        msg: "OS: {{ ansible_distribution }}, GPU: {{ gpu_vendor }}"
 
   tasks:
     - name: Run common roles
