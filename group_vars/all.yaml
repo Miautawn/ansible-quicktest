@@ -13,6 +13,7 @@ common_roles:
   - common_utils_yazi
   - common_utils_fd
   - common_utils_ripgrep
+  - common_utils_bat
 
   # development
   - common_dev_python
