@@ -30,7 +30,7 @@
       tags: always
 
     - name: Detect gpu_vendor (via lspci)
-      ansible.builtin.command: lspci -nn | grep -i vga
+      ansible.builtin.shell: lspci -nn | grep -i vga
       register: gpu_info
       changed_when: false   # detection shouldn't mark host as changed
       tags: always
