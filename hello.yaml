@@ -26,7 +26,6 @@
       assert:
         that: device_type in ['desktop', 'laptop']
         fail_msg: "Invalid device type '{{ device_type }}', specify one of ['desktop', 'laptop']"
-        success_msg: "Input looks good! Running for {{ device_type }}"
       tags: always
 
     - name: Detect gpu_vendor (via lspci)
@@ -48,11 +47,10 @@
           UNKNOWN
           {%- endif -%}
       tags: always
-      no_log: true
 
     - name: "Print System Info"
       ansible.builtin.debug:
-        msg: "OS: {{ ansible_distribution }}, GPU: {{ gpu_vendor }}"
+        msg: "DEVICE: {{ device_type }, }OS: {{ ansible_distribution }}, GPU: {{ gpu_vendor }}"
 
   tasks:
     - name: Run common roles
