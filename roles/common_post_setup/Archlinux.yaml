@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_distribution }} | gh | Install"
+  community.general.pacman:
+    name: github-cli 
+    state: present
+  become: true

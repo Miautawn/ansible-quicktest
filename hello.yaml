@@ -29,6 +29,30 @@
         success_msg: "Input looks good! Running for {{ device_type }}"
       tags: always
 
+    - name: Detect gpu_vendor (via lspci)
+      ansible.builtin.command: lspci -nn | grep -i vga
+      register: gpu_info
+      changed_when: false   # detection shouldn't mark host as changed
+      tags: always
+
+    - name: Set 'gpu_vendor' fact
+      set_fact:
+        gpu_vendor: >-
+          {% if 'NVIDIA' in gpu_info.stdout %}
+          NVIDIA
+          {% elif 'AMD' in gpu_info.stdout or 'ATI' in gpu_info.stdout %}
+          AMD
+          {% elif 'Intel' in gpu_info.stdout %}
+          INTEL
+          {% else %}
+          UNKNOWN
+          {% endif %}
+      tags: always
+
+    - name: "Print System Info"
+      ansible.builtin.debug:
+        msg: OS: {{ ansible_distribution }}, GPU: {{ gpu_vendor }}
+
   tasks:
     - name: Run common roles
       ansible.builtin.include_role:

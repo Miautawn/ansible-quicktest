@@ -32,10 +32,13 @@ common_roles:
   - common_de_kitty
   - common_de_polybar
   - common_de_firefox
+  
+  # - common_post_setup
 
 desktop_roles:
   - desktop_mock
   # - desktop_core_game
+  # - desktop_post_setup
 
 laptop_roles:
   - laptop_core_bluetooth
@@ -44,8 +47,4 @@ laptop_roles:
   # Utils
   - laptop_utils_powertop
   # - laptop_core_bluetooth
-
-# Core:
-# powertop
-# bluetooth
-
+  # - laptop_post_setup
