@@ -32,8 +32,6 @@ common_roles:
   - common_de_kitty
   - common_de_polybar
   - common_de_firefox
-  
-  - post_setup
 
 desktop_roles:
   - desktop_mock
