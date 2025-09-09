@@ -36,7 +36,6 @@ common_roles:
 desktop_roles:
   - desktop_mock
   # - desktop_core_game
-  # - desktop_post_setup
 
 laptop_roles:
   - laptop_core_bluetooth
@@ -45,7 +44,6 @@ laptop_roles:
   # Utils
   - laptop_utils_powertop
   # - laptop_core_bluetooth
-  # - laptop_post_setup
 
 post_setup_roles:
   - post_setup
