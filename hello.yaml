@@ -38,14 +38,15 @@
     - name: Set 'gpu_vendor' fact
       set_fact:
         gpu_vendor: >-
-          {% if 'NVIDIA' in gpu_info.stdout %}
+          {%- if 'NVIDIA' in gpu_info.stdout -%}
           NVIDIA
-          {% elif 'AMD' in gpu_info.stdout or 'ATI' in gpu_info.stdout %}
+          {%- elif 'AMD' in gpu_info.stdout or 'ATI' in gpu_info.stdout -%}
           AMD
-          {% elif 'Intel' in gpu_info.stdout %}
+          {%- elif 'Intel' in gpu_info.stdout -%}
           INTEL
-          {% else %} UNKNOWN
-          {% endif %}
+          {%- else -%}
+          UNKNOWN
+          {%- endif -%}
       tags: always
 
     - name: "Print System Info"
