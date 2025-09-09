@@ -44,6 +44,3 @@ laptop_roles:
   # Utils
   - laptop_utils_powertop
   # - laptop_core_bluetooth
-
-post_setup_roles:
-  - post_setup

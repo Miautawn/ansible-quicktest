@@ -54,10 +54,35 @@
         msg: "DEVICE: {{ device_type }}, OS: {{ ansible_distribution }}, GPU: {{ gpu_vendor }}"
 
   tasks:
+   # - name: Run common roles
+   #   ansible.builtin.include_role:
+   #     name: "{{ item }}"
+   #     apply:
+   #       tags: "{{ item.split('_') }}"
+   #   loop: "{{ common_roles }}"
+   #   tags: always
+
+   # - name: Run desktop roles
+   #   when: device_type == 'desktop'
+   #   ansible.builtin.include_role:
+   #     name: "{{ item }}"
+   #     apply:
+   #       tags: "{{ item.split('_') }}"
+   #   loop: "{{ desktop_roles }}"
+   #   tags: always
+
+   # - name: Run laptop roles
+   #   when: device_type == 'laptop'
+   #   ansible.builtin.include_role:
+   #     name: "{{ item }}"
+   #     apply:
+   #       tags: "{{ item.split('_') }}"
+   #   loop: "{{ laptop_roles }}"
+   #   tags: always
       
-    - name: Run post setup roles
+  post_tasks:
+    - name: Run Post Setup
       ansible.builtin.include_role:
-        name: "{{ item }}"
-      loop: "{{ post_setup_roles }}"
+        name: post_setup
       tags: always
 
