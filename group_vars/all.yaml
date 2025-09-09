@@ -33,7 +33,7 @@ common_roles:
   - common_de_polybar
   - common_de_firefox
   
-  # - common_post_setup
+  - post_setup
 
 desktop_roles:
   - desktop_mock
@@ -48,3 +48,7 @@ laptop_roles:
   - laptop_utils_powertop
   # - laptop_core_bluetooth
   # - laptop_post_setup
+
+
+post_setup_roles:
+  - post_setup

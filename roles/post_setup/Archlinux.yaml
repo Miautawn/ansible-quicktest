@@ -1,0 +1,27 @@
+---
+- name: "{{ ansible_distribution }} | Disable annoying ass beeping sound"
+  ansible.builtin.copy:
+    dest: /etc/modprobe.d/nobeep.conf
+    content: |
+      # Disable PC speaker beep
+      blacklist pcspkr
+      blacklist snd_pcsp
+    owner: root
+    group: root
+    mode: '0644'
+  when: device_type == "laptop"
+  become: true
+
+- name: "{{ ansible_distribution }} | Enable 'TearFree' option for AMD drivers"
+  ansible.builtin.copy:
+    dest: /etc/X11/xorg.conf.d/20-amdgpu.conf
+    content: |
+      Section "OutputClass"
+          Identifier "AMD"
+          Option "TearFree" "true"
+      EndSection
+    owner: root
+    group: root
+    mode: '0644'
+  #when: gpu_vendor == "laptop"
+  become: true
