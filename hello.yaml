@@ -83,8 +83,6 @@
     - name: Run post setup roles
       ansible.builtin.include_role:
         name: "{{ item }}"
-        apply:
-          tags: "{{ item.split('_') }}"
       loop: "{{ post_setup_roles }}"
       tags: always
 
