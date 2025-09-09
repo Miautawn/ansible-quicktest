@@ -44,8 +44,7 @@
           AMD
           {% elif 'Intel' in gpu_info.stdout %}
           INTEL
-          {% else %}
-          UNKNOWN
+          {% else %} UNKNOWN
           {% endif %}
       tags: always
 
