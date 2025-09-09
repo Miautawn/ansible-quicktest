@@ -6,4 +6,4 @@
 
 - name: "{{ ansible_distribution}} | POST SETUP | Running tasks..."
   ansible.builtin.include_tasks: "{{ ansible_distribution }}.yaml"
-  when: distribution_config.stat.exist
+  when: distribution_config.stat.exists
