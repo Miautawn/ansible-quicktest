@@ -23,5 +23,5 @@
     owner: root
     group: root
     mode: '0644'
-  #when: gpu_vendor == "laptop"
+  when: gpu_vendor == "AMD"
   become: true
