@@ -25,3 +25,20 @@
     mode: '0644'
   when: gpu_vendor == "AMD"
   become: true
+
+- name: "{{ ansible_distribution }} | Configure touchpad tapping + natural scroll"
+  ansible.builtin.copy:
+    dest: /etc/X11/xorg.conf.d/30-touchpad.conf
+    content: |
+      Section "InputClass"
+        Identifier "touchpad-config"
+        Driver "libinput"
+        Option "Tapping" "on"
+        Option "NaturalScrolling" "true"
+        Option "ClickMethod" "clickfinger"
+      EndSection
+    owner: root
+    group: root
+    mode: '0644'
+  when: device_type == "laptop"
+  become: true
