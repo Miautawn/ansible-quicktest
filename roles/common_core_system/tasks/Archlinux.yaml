@@ -2,7 +2,7 @@
 - name: "{{ ansible_facts['distribution'] }} | system | Update pacman"
   community.general.pacman:
     update_cache: true
-    state: latest
+    upgrade: true
   become: true
 
 
