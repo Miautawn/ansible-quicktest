@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_distribution }} | Disable annoying ass beeping sound"
+- name: "{{ ansible_facts['distribution'] }} | Disable annoying ass beeping sound"
   ansible.builtin.copy:
     dest: /etc/modprobe.d/nobeep.conf
     content: |
@@ -12,7 +12,7 @@
   when: device_type == "laptop"
   become: true
 
-- name: "{{ ansible_distribution }} | Enable 'TearFree' option for AMD drivers"
+- name: "{{ ansible_facts['distribution'] }} | Enable 'TearFree' option for AMD drivers"
   ansible.builtin.copy:
     dest: /etc/X11/xorg.conf.d/20-amdgpu.conf
     content: |
@@ -26,7 +26,7 @@
   when: gpu_vendor == "AMD"
   become: true
 
-- name: "{{ ansible_distribution }} | Configure touchpad tapping + natural scroll"
+- name: "{{ ansible_facts['distribution'] }} | Configure touchpad tapping + natural scroll"
   ansible.builtin.copy:
     dest: /etc/X11/xorg.conf.d/30-touchpad.conf
     content: |

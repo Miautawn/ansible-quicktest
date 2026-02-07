@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_distribution }} | nvim | Install"
+- name: "{{ ansible_facts['distribution'] }} | nvim | Install"
   community.general.pacman:
     name: neovim
     state: present

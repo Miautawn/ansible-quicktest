@@ -1,17 +1,17 @@
 ---
-- name: "{{ ansible_distribution }} | fonts | 0xProto Nerd | Install"
+- name: "{{ ansible_facts['distribution'] }} | fonts | 0xProto Nerd | Install"
   community.general.pacman:
     name: ttf-0xproto-nerd
     state: present
   become: true
 
-- name: "{{ ansible_distribution }} | fonts | Nerd Symbols | Install"
+- name: "{{ ansible_facts['distribution'] }} | fonts | Nerd Symbols | Install"
   community.general.pacman:
     name: ttf-nerd-fonts-symbols
     state: present
   become: true
 
-# - name: "{{ ansible_distribution }} | fonts | 0xProto | Install"
+# - name: "{{ ansible_facts['distribution'] }} | fonts | 0xProto | Install"
 #   community.general.pacman:
 #     name: feh
 #     state: present

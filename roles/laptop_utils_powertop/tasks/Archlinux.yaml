@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_distribution }} | powertop | Install"
+- name: "{{ ansible_facts['distribution'] }} | powertop | Install"
   community.general.pacman:
     name: powertop
     state: present

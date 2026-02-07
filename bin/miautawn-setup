@@ -56,8 +56,8 @@ function __cmd() {
 }
 
 function arch_setup() {
-    __log DEBUG "Updating package index..."
-    __cmd "sudo pacman -Sy --noconfirm"
+    __log DEBUG "Updating the system..."
+    sudo pacman -Syu --noconfirm
 
     # First of all - check neccessary packages are installed:
     #   * git - obviously for pulling the repos if they don't exist
