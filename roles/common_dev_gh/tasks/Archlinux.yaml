@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_distribution }} | gh | Install"
+- name: "{{ ansible_facts['distribution'] }} | gh | Install"
   community.general.pacman:
     name: github-cli 
     state: present

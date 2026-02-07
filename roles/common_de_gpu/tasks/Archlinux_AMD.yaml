@@ -1,17 +1,17 @@
 ---
-- name: "{{ ansible_distribution }} | GPU DRIVERS [AMD] | mesa | Install"
+- name: "{{ ansible_facts['distribution'] }} | GPU DRIVERS [AMD] | mesa | Install"
   community.general.pacman:
     name: mesa
     state: present
   become: true
 
-- name: "{{ ansible_distribution }} | GPU DRIVERS [AMD] | xf86-video-amdgpu | Install"
+- name: "{{ ansible_facts['distribution'] }} | GPU DRIVERS [AMD] | xf86-video-amdgpu | Install"
   community.general.pacman:
     name: xf86-video-amdgpu
     state: present
   become: true
 
-- name: "{{ ansible_distribution }} | GPU DRIVERS [AMD] | vulkan-radeon | Install"
+- name: "{{ ansible_facts['distribution'] }} | GPU DRIVERS [AMD] | vulkan-radeon | Install"
   community.general.pacman:
     name: vulkan-radeon
     state: present

@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_distribution }} | polkit | Install"
+- name: "{{ ansible_facts['distribution'] }} | polkit | Install"
   community.general.pacman:
     name: polkit
     state: present

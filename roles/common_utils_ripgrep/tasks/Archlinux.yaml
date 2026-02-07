@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_distribution }} | ripgrep | Install"
+- name: "{{ ansible_facts['distribution'] }} | ripgrep | Install"
   community.general.pacman:
     name: ripgrep 
     state: present

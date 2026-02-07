@@ -1,17 +1,17 @@
 ---
-- name: "{{ ansible_distribution }} | lockscreen | xss-lock | Install"
+- name: "{{ ansible_facts['distribution'] }} | lockscreen | xss-lock | Install"
   community.general.pacman:
     name: xss-lock
     state: present
   become: true
 
-- name: "{{ ansible_distribution }} | lockscreen | xsecurelock | Install"
+- name: "{{ ansible_facts['distribution'] }} | lockscreen | xsecurelock | Install"
   community.general.pacman:
     name: xsecurelock
     state: present
   become: true
 
-# - name: "{{ ansible_distribution }} | fonts | 0xProto | Install"
+# - name: "{{ ansible_facts['distribution'] }} | fonts | 0xProto | Install"
 #   community.general.pacman:
 #     name: feh
 #     state: present

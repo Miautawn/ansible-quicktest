@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_distribution }} | herbstluftwm | Install"
+- name: "{{ ansible_facts['distribution'] }} | herbstluftwm | Install"
   community.general.pacman:
     name: herbstluftwm
     state: present

@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_distribution }} | ncdu | Install"
+- name: "{{ ansible_facts['distribution'] }} | ncdu | Install"
   community.general.pacman:
     name: ncdu
     state: present

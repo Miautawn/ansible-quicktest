@@ -9,7 +9,7 @@
 
   # needed for beutiful output callback
   roles:
-    - role: townk.beautiful_output
+    - ansible-output-prettify
 
   pre_tasks:
     - pause:
@@ -51,7 +51,7 @@
 
     - name: "Print System Info"
       ansible.builtin.debug:
-        msg: "DEVICE: {{ device_type }}, OS: {{ ansible_distribution }}, GPU: {{ gpu_vendor }}"
+        msg: "DEVICE: {{ device_type }}, OS: {{ ansible_facts['distribution'] }}, GPU: {{ gpu_vendor }}"
 
   tasks:
     - name: Run common roles

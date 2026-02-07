@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_distribution }} | kitty | Install"
+- name: "{{ ansible_facts['distribution'] }} | kitty | Install"
   community.general.pacman:
     name: kitty
     state: present

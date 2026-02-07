@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_distribution }} | fd | Install"
+- name: "{{ ansible_facts['distribution'] }} | fd | Install"
   community.general.pacman:
     name: fd 
     state: present

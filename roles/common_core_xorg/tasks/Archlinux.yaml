@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_distribution }} | xorg | Install"
+- name: "{{ ansible_facts['distribution'] }} | xorg | Install"
   community.general.pacman:
     name: xorg
     state: present
