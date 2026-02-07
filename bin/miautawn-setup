@@ -162,6 +162,7 @@ else
     __log DEBUG "Updating miautawn-setup repo..."
     __cmd "git -C $SETUP_DIR pull"
 fi
+ansible-galaxy install -r "$SETUP_DIR/requirements.yaml"
 ansible-playbook "$SETUP_DIR/hello.yaml" --ask-become-pass "$@"
 
 __log INFO "STEP 3. Replicating System Configuration..."

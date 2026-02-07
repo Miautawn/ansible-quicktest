@@ -9,7 +9,7 @@
 
   # needed for beutiful output callback
   roles:
-    - role: townk.beautiful_output
+    - ansible-output-prettify
 
   pre_tasks:
     - pause:
