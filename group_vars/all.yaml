@@ -22,6 +22,7 @@ common_roles:
   # Desktop Environment
   - common_de_fonts
   - common_de_gpu
+  - common_de_notifications
   - common_de_pipewire
   - common_de_lemurs
   - common_de_herbstluftwm
