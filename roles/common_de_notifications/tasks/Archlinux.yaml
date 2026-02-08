@@ -1,0 +1,13 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | libnotify | Install"
+  community.general.pacman:
+    name: libnotify
+    state: present
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | dunst | Install"
+  community.general.pacman:
+    name: dunst
+    state: present
+  become: true
+
