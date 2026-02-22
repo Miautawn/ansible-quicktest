@@ -28,3 +28,9 @@
     name: pipewire-jack
     state: present
   become: true
+
+- name: "{{ ansible_facts['distribution'] }} | wiremix | Install"
+  community.general.pacman:
+    name: wiremix
+    state: present
+  become: true
