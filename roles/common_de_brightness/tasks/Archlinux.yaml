@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | brightness | brightnessctl | Install"
+  community.general.pacman:
+    name: brightnessctl
+    state: present
+  become: true
