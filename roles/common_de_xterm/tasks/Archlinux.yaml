@@ -1,6 +1,0 @@
----
-- name: "{{ ansible_facts['distribution'] }} | xterm | Install"
-  community.general.pacman:
-    name: xterm
-    state: present
-  become: true

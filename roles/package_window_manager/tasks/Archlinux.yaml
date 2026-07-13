@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | WINDOW MANAGER | Install"
+  community.general.pacman:
+    name: herbstluftwm
+    state: present
+  become: true

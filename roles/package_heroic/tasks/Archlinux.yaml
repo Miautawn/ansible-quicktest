@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | HEROIC | Install"
+  community.general.flatpak:
+    name: com.heroicgameslauncher.hgl
+    state: latest
+    method: user

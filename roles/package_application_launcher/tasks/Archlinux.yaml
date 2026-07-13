@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | APPLICATION LAUNCHER | Install"
+  community.general.pacman:
+    name: rofi
+    state: present
+  become: true

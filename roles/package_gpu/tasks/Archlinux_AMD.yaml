@@ -1,0 +1,9 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | GPU DRIVERS | Install"
+  community.general.pacman:
+    name:
+      - mesa
+      - xf86-video-amdgpu
+      - vulkan-radeon
+    state: present
+  become: true

@@ -1,2 +1,9 @@
-- src: https://github.com/Miautawn/ansible-output-prettify.git
-  name: ansible-output-prettify
+---
+collections:
+  - name: community.general
+    version: "*"
+
+roles:
+  - src: https://github.com/Miautawn/ansible-output-prettify.git
+    name: ansible-output-prettify
+

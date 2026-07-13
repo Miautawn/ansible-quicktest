@@ -1,0 +1,8 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | BLUETOOTH | Install"
+  community.general.pacman:
+    name:
+      - bluez
+      - bluez-utils
+    state: present
+  become: true

@@ -1,0 +1,12 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | LOGIN MANAGER | Install"
+  community.general.pacman:
+    name: lemurs
+    state: present
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | LOGIN MANAGER | Enabling lemur service"
+  ansible.builtin.service:
+    name: lemurs
+    enabled: true
+  become: true

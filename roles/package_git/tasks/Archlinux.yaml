@@ -1,0 +1,9 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | GIT | Install"
+  community.general.pacman:
+    name:
+      - git
+      - github-cli 
+      - lazygit
+    state: present
+  become: true

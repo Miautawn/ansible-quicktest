@@ -1,0 +1,8 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | NOTIFICATIONS | Install"
+  community.general.pacman:
+    name:
+      - libnotify
+      - dunst
+    state: present
+  become: true

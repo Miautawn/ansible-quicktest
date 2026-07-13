@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | PYTHON | Install"
+  community.general.pacman:
+    name: uv
+    state: present
+  become: true

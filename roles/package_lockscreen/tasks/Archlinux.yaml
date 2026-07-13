@@ -1,0 +1,8 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | LOCKSCREEN | Install"
+  community.general.pacman:
+    name:
+      - xss-lock
+      - xsecurelock
+    state: present
+  become: true

@@ -1,0 +1,12 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | AUDIO | Install"
+  community.general.pacman:
+    name:
+      - pipewire
+      - pipewire-audio
+      - pipewire-alsa
+      - pipewire-pulse
+      - pipewire-jack
+      - wiremix
+    state: present
+  become: true

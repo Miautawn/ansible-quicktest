@@ -1,0 +1,45 @@
+---
+# nixpkgs_stable: "github:nixos/nixpkgs/nixos-26.05"
+nixpkgs_stable: "github:NixOS/nixpkgs/nixos-unstable"
+nixpkgs_unstable: "github:NixOS/nixpkgs/nixos-unstable"
+
+common_roles:
+
+
+  # Utils
+  - common_utils_htop
+  - common_utils_nvim
+  - common_utils_btop
+  - common_utils_ncdu
+  - common_utils_yazi
+  - common_utils_fd
+  - common_utils_ripgrep
+  - common_utils_bat
+
+  # development
+  - common_dev_python
+  - common_dev_gh
+
+  # Desktop Environment
+  - common_de_fonts
+  - common_de_gpu
+  - common_de_notifications
+  - common_de_herbstluftwm
+  - common_de_feh
+  - common_de_rofi
+  - common_de_xterm # purely for development reasons
+  - common_de_kitty
+  - common_de_polybar
+  - common_de_firefox
+
+desktop_roles:
+  - desktop_mock
+  # - desktop_core_game
+
+laptop_roles:
+  - laptop_core_bluetooth
+  - laptop_core_wifi
+
+  # Utils
+  - laptop_utils_powertop
+  # - laptop_core_bluetooth

@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | ZEN | Install"
+  community.general.flatpak:
+    name: app.zen_browser.zen
+    state: latest
+    method: user

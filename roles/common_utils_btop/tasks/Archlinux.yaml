@@ -1,6 +1,0 @@
----
-- name: "{{ ansible_facts['distribution'] }} | btop | Install"
-  community.general.pacman:
-    name: btop
-    state: present
-  become: true

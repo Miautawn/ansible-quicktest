@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_facts['distribution'] }} | Disable annoying ass beeping sound"
+- name: "{{ ansible_facts['distribution'] }} | POST SETUP | Disabling annoying ass beeping sound"
   ansible.builtin.copy:
     dest: /etc/modprobe.d/nobeep.conf
     content: |
@@ -12,7 +12,7 @@
   when: device_type == "laptop"
   become: true
 
-- name: "{{ ansible_facts['distribution'] }} | Enable 'TearFree' option for AMD drivers"
+- name: "{{ ansible_facts['distribution'] }} | POST SETUP | Enabling 'TearFree' option for AMD drivers"
   ansible.builtin.copy:
     dest: /etc/X11/xorg.conf.d/20-amdgpu.conf
     content: |
@@ -26,7 +26,7 @@
   when: gpu_vendor == "AMD"
   become: true
 
-- name: "{{ ansible_facts['distribution'] }} | Configure touchpad tapping + natural scroll"
+- name: "{{ ansible_facts['distribution'] }} | POST SETUP | Configuring touchpad tapping + natural scroll"
   ansible.builtin.copy:
     dest: /etc/X11/xorg.conf.d/30-touchpad.conf
     content: |
@@ -42,3 +42,16 @@
     mode: '0644'
   when: device_type == "laptop"
   become: true
+
+# - name: "{{ ansible_facts['distribution'] }} | Configuring Nix GPU driver passthrough"
+#   ansible.builtin.copy:
+#     dest: /etc/tmpfiles.d/nix-opengl.conf
+#     content: |
+#       # Type  Path                 Mode UID GID Age Argument
+#       L+      /run/opengl-driver   -    -   -   -   /nix/var/nix/profiles/nix-gpu-64bit
+#       L+      /run/opengl-driver-32 -   -   -   -   /nix/var/nix/profiles/nix-gpu-32bit
+#     mode: '0644'
+#     owner: root
+#     group: root
+#   when: gpu_vendor == "AMD"
+#   become: true

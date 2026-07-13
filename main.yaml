@@ -1,0 +1,110 @@
+---
+- name: Development Environment Setup
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+
+  vars:
+    nixpkgs_stable: "github:nixos/nixpkgs/nixos-26.05"
+    nixpkgs_unstable: "github:NixOS/nixpkgs/nixos-unstable"
+    device_type_env: "{{ lookup('env', 'SYSTEM_DEVICE_TYPE') | default(Undefined, true) }}"
+
+  pre_tasks:
+    - pause:
+        prompt: "Enter device type (one of: desktop, laptop)"
+      register: prompt
+      when: device_type_env is undefined
+
+    - name: "Set 'device_type' fact"
+      set_fact:
+        device_type: "{{ device_type_env | default(prompt.user_input, true) | lower | trim }}"
+      tags: always
+
+    - name: Validate 'device_type'
+      assert:
+        that: device_type in ['desktop', 'laptop']
+        fail_msg: "Invalid device type '{{ device_type }}', specify one of ['desktop', 'laptop']"
+        success_msg: "Valid device type: {{ device_type }}"
+      tags: always
+
+    - name: Detect gpu_vendor (via lspci)
+      ansible.builtin.shell: lspci -nn | grep -i vga
+      register: gpu_info
+      changed_when: false   # detection shouldn't mark host as changed
+      tags: always
+
+    - name: Set 'gpu_vendor' fact
+      set_fact:
+        gpu_vendor: >-
+          {%- if 'NVIDIA' in gpu_info.stdout -%}
+          NVIDIA
+          {%- elif 'AMD' in gpu_info.stdout or 'ATI' in gpu_info.stdout -%}
+          AMD
+          {%- elif 'Intel' in gpu_info.stdout -%}
+          INTEL
+          {%- else -%}
+          UNKNOWN
+          {%- endif -%}
+      tags: always
+
+    - name: "Print System Info"
+      ansible.builtin.debug:
+        msg: "DEVICE: {{ device_type }}, OS: {{ ansible_facts['distribution'] }}, GPU: {{ gpu_vendor }}"
+
+  tasks:
+    - name: "SYSTEM SETUP"
+      include_role:
+        name: "{{ current_role }}"
+      loop:
+        - setup_pacman
+        - setup_nix
+        - setup_flatpak
+      loop_control:
+        loop_var: current_role
+
+    - name: "INSTALL PACKAGES"
+      include_role:
+        name: "{{ current_role }}"
+      loop:
+        - package_xorg
+        - package_polkit
+        - package_fonts
+        - package_audio
+        - package_gpu
+        - package_login_manager
+        - package_window_manager
+        - package_application_launcher
+        - package_notifications
+        - package_lockscreen
+        - package_polybar
+        - package_cli_stuff
+        - package_yazi
+        - package_git
+        - package_feh
+        - package_kitty
+        - package_xterm
+        - package_firefox
+        - package_zen_browser
+        - package_flameshot
+        - package_mpv
+        - package_python
+        - package_heroic
+      loop_control:
+        loop_var: current_role
+
+    - name: "INSTALL LAPTOP-SPECIFIC PACKAGES"
+      include_role:
+        name: "{{ current_role }}"
+      loop:
+        - package_wifi
+        - package_bluetooth
+        - package_brightness
+        - package_powertop
+      loop_control:
+        loop_var: current_role
+      when: device_type == 'laptop'
+
+  post_tasks:
+    - name: "RUN POST SETUP"
+      include_role:
+        name: post_setup

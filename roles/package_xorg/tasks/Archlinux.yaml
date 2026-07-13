@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | XORG | Install"
+  community.general.pacman:
+    name: xorg
+    state: present
+  become: true

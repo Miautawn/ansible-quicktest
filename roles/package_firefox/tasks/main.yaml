@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_facts['distribution'] }} | POST SETUP | Looking for distro-specific task..."
+- name: "{{ ansible_facts['distribution'] }} | FIREFOX | Looking for distro specific task..."
   ansible.builtin.include_tasks: "{{ item }}"
   with_first_found:
     - files:

@@ -1,0 +1,25 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | NIX SETUP | Installing nix through pacman"
+  community.general.pacman:
+    name: nix
+    state: present
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | NIX SETUP | Enabling nix service"
+  ansible.builtin.systemd_service:
+    name: nix-daemon.service
+    state: started
+    enabled: true
+
+- name: "{{ ansible_facts['distribution'] }} | NIX SETUP | Enabling experimental nix syntax"
+  ansible.builtin.lineinfile:
+    path: /etc/nix/nix.conf
+    regexp: "^experimental-features ="
+    line: "experimental-features = nix-command flakes"
+    state: present
+    create: true
+
+    owner: root
+    group: root
+    mode: '0644'
+  become: true

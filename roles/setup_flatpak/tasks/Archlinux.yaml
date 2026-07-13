@@ -1,0 +1,16 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | FLATPAK SETUP | Installing flatpak through pacman"
+  community.general.pacman:
+    name:
+      - flatpak
+      - xdg-desktop-portal
+      - xdg-desktop-portal-gtk
+    state: present
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | FLATPAK SETUP | Adding flathub remote"
+  community.general.flatpak_remote:
+    name: flathub
+    state: present
+    flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+    method: user

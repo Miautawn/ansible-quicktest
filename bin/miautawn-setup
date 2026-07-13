@@ -23,6 +23,7 @@ USER_SCRIPTS_DIR="$HOME/.local/bin"
 
 SETUP_CONFIG="$CONFIG_DIR/settings.conf"
 SETUP_LOG="$LOG_DIR/log"
+FIRST_RUN=0
 #############
 # FUNCTIONS #
 #############
@@ -46,18 +47,22 @@ function __log() {
     echo "$1: $2" >> $SETUP_LOG
 }
 
-function __cmd() {
-    echo ">> $1:" >> $SETUP_LOG
-    if eval $1 >> $SETUP_LOG 2>&1; then
-        return 0
-    fi
-    __log ERROR "Something went wrong! Check the logs at $SETUP_LOG"
-    return 1
-}
+# function __cmd() {
+#     echo ">> $1:" >> $SETUP_LOG
+#     if eval $1 >> $SETUP_LOG 2>&1; then
+#         return 0
+#     fi
+#     __log ERROR "Something went wrong! Check the logs at $SETUP_LOG"
+#     return 1
+# }
 
 function arch_setup() {
-    __log DEBUG "Updating the system..."
-    sudo pacman -Syu --noconfirm
+
+    # Update the system if running for first time
+    if [[ $FIRST_RUN == 1 ]]; then
+        __log DEBUG "Detected first run: pacman -Syu"
+        echo "$SUDO_PASS" | sudo -S pacman -Syu --noconfirm
+    fi
 
     # First of all - check neccessary packages are installed:
     #   * git - obviously for pulling the repos if they don't exist
@@ -67,22 +72,22 @@ function arch_setup() {
 
     if ! pacman -Q git >/dev/null 2>&1; then
         __log DEBUG "Installing Git..."
-        __cmd "sudo pacman -S --noconfirm git"
+        __cmd "echo '$SUDO_PASS' | sudo -S pacman -S --noconfirm git"
     fi
 
     if ! pacman -Q ansible >/dev/null 2>&1; then
         __log DEBUG "Installing Ansible..."
-        __cmd "sudo pacman -S --noconfirm ansible"
+        __cmd "echo '$SUDO_PASS' | sudo -S pacman -S --noconfirm ansible"
     fi
 
     if ! pacman -Q python-watchdog >/dev/null 2>&1; then
         __log DEBUG "Installing Python-Watchdog..."
-        __cmd "sudo pacman -S --noconfirm python-watchdog"
+        __cmd "echo '$SUDO_PASS' | sudo -S pacman -S --noconfirm python-watchdog"
     fi
 
     if ! pacman -Q chezmoi >/dev/null 2>&1; then
         __log DEBUG "Installing Chezmoi..."
-        __cmd "sudo pacman -S --noconfirm chezmoi"
+        __cmd "echo '$SUDO_PASS' | sudo -S pacman -S --noconfirm chezmoi"
     fi
 }
 
@@ -99,6 +104,10 @@ function detect_os() {
 # MAIN #
 ########
 
+echo -n "🔒 Enter sudo password: "
+read -s SUDO_PASS
+echo ""
+
 # Create log file if it doesn't exist and clear it
 if ! [[ -f $SETUP_LOG ]]; then
     mkdir -p $LOG_DIR
@@ -108,10 +117,12 @@ fi
 
 # Check available configuration
 if ! [[ -f $SETUP_CONFIG ]]; then
-    __cmd "mkdir -p $CONFIG_DIR"
-    __cmd "touch $SETUP_CONFIG"
+    mkdir -p $CONFIG_DIR
+    touch $SETUP_CONFIG
+
+    FIRST_RUN=1
 fi
-__cmd "source $SETUP_CONFIG"
+source $SETUP_CONFIG
 
 # Prompt user for system device type if not indicated
 if ! [[ -n $SYSTEM_DEVICE_TYPE ]]; then
@@ -119,7 +130,7 @@ if ! [[ -n $SYSTEM_DEVICE_TYPE ]]; then
     options=("desktop" "laptop")
     select device_type in "${options[@]}"; do
         if [[ -n $device_type ]]; then
-            __cmd "echo "SYSTEM_DEVICE_TYPE=$device_type" >> $SETUP_CONFIG"
+            echo "SYSTEM_DEVICE_TYPE=$device_type" >> $SETUP_CONFIG
             break
         fi
         echo "invalid option $REPLY"
@@ -132,7 +143,7 @@ if ! [[ -n $SYSTEM_THEME ]]; then
     options=("stock" "archcraft")
     select system_theme in "${options[@]}"; do
         if [[ -n $device_type ]]; then
-            __cmd "echo "SYSTEM_THEME=$system_theme" >> $SETUP_CONFIG"
+            echo "SYSTEM_THEME=$system_theme" >> $SETUP_CONFIG
             break
         fi
         echo "invalid option $REPLY"
@@ -140,9 +151,9 @@ if ! [[ -n $SYSTEM_THEME ]]; then
 fi
 
 # Make user configuration available for child processes
-__cmd "source $SETUP_CONFIG"
-__cmd "export SYSTEM_DEVICE_TYPE"
-__cmd "export SYSTEM_THEME"
+source $SETUP_CONFIG
+export SYSTEM_DEVICE_TYPE
+export SYSTEM_THEME
 
 DETECTED_OS=$(detect_os)
 __log INFO "STEP 1. Running OS setup for: $DETECTED_OS"
@@ -157,13 +168,17 @@ esac
 __log INFO "STEP 2. Replicating System Setup..."
 if ! [[ -d $SETUP_DIR ]]; then
     __log DEBUG "Cloning miautawn-setup repo..."
-    __cmd "git clone --recurse-submodules https://github.com/Miautawn/ansible-quicktest $SETUP_DIR"
+    git clone --recurse-submodules https://github.com/Miautawn/ansible-quicktest $SETUP_DIR
 else
     __log DEBUG "Updating miautawn-setup repo..."
-    __cmd "git -C $SETUP_DIR pull"
+    git -C $SETUP_DIR pull
 fi
+
+__log DEBUG "Downloading ansible plugins..."
 ANSIBLE_CONFIG="$SETUP_DIR/ansible.cfg" ansible-galaxy install -r "$SETUP_DIR/requirements.yaml"
-ANSIBLE_CONFIG="$SETUP_DIR/ansible.cfg" ansible-playbook "$SETUP_DIR/hello.yaml" --ask-become-pass "$@"
+
+__log DEBUG "Running ansible playbook..."
+ANSIBLE_CONFIG="$SETUP_DIR/ansible.cfg" ansible-playbook "$SETUP_DIR/main.yaml" --extra-vars "ansible_become_password=$SUDO_PASS" "$@"
 
 __log INFO "STEP 3. Replicating System Configuration..."
 if ! [[ -d $(chezmoi source-path) ]]; then
@@ -175,8 +190,8 @@ chezmoi update
 
 __log INFO "STEP 4. Publishing Update Script..."
 __log DEBUG "Symlinking 'miautawn-setup' to ~/.local/bin..."
-__cmd "mkdir -p $USER_SCRIPTS_DIR"
-__cmd "ln -sf $SETUP_DIR/bin/miautawn-setup $USER_SCRIPTS_DIR/miautawn-setup"
+mkdir -p $USER_SCRIPTS_DIR
+ln -sf $SETUP_DIR/bin/miautawn-setup $USER_SCRIPTS_DIR/miautawn-setup
 if ! [[ ":$PATH:" == *":$USER_SCRIPTS_DIR:"* ]]; then
     __log DEBUG "You should consider adding $USER_SCRIPTS_DIR to your PATH!"
 fi

@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | FLAMESHOT | Install"
+  community.general.pacman:
+    name: flameshot
+    state: present
+  become: true

@@ -1,7 +1,0 @@
----
-- name: "{{ ansible_facts['distribution'] }} | polybar | Install"
-  community.general.pacman:
-    name: polybar
-    state: present
-  become: true
-

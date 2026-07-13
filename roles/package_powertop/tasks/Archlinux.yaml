@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | POWERTOP | Install"
+  community.general.pacman:
+    name: powertop
+    state: present
+  become: true

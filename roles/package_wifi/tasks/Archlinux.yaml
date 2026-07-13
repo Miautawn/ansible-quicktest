@@ -1,0 +1,8 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | WIFI | Install"
+  community.general.pacman:
+    name: 
+      - iwd
+      - impala
+    state: present
+  become: true

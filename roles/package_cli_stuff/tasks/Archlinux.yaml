@@ -1,0 +1,11 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | CLI STUFF | Install"
+  community.general.pacman:
+    name:
+      - bat
+      - btop
+      - fd
+      - ripgrep
+      - ncdu
+    state: present
+  become: true
