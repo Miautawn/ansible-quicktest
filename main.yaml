@@ -73,6 +73,7 @@
         - package_gpu
         - package_login_manager
         - package_window_manager
+        - package_compositor
         - package_application_launcher
         - package_notifications
         - package_lockscreen

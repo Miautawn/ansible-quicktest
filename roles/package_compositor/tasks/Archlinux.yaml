@@ -1,0 +1,6 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | COMPOSITOR | Install"
+  community.general.pacman:
+    name: picom
+    state: present
+  become: true
