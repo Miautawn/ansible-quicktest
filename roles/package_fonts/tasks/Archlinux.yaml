@@ -2,6 +2,7 @@
 - name: "{{ ansible_facts['distribution'] }} | FONYS | Install"
   community.general.pacman:
     name:
+      - noto-fonts-emoji
       - ttf-0xproto-nerd
       - ttf-nerd-fonts-symbols
     state: present
