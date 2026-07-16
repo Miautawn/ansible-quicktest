@@ -7,5 +7,6 @@
       - fd
       - ripgrep
       - ncdu
+      - fastfetch
     state: present
   become: true
