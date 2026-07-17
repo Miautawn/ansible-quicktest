@@ -20,6 +20,7 @@ CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config/}/miautawn-setup"
 LOG_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/miautawn-setup"
 SETUP_DIR="$HOME/.miautawn-setup"
 USER_SCRIPTS_DIR="$HOME/.local/bin"
+DOTFILES_DIR="$HOME/.local/share/chezmoi"
 
 SETUP_CONFIG="$CONFIG_DIR/settings.conf"
 SETUP_LOG="$LOG_DIR/log"
@@ -183,18 +184,27 @@ ANSIBLE_CONFIG="$SETUP_DIR/ansible.cfg" ansible-playbook "$SETUP_DIR/main.yaml" 
 __log INFO "STEP 3. Replicating System Configuration..."
 if ! [[ -d $(chezmoi source-path) ]]; then
     __log DEBUG "Cloning miautawn-dotfiles repo..."
-    chezmoi init https://github.com/Miautawn/test-dotfiles.git
+    chezmoi --source "$DOTFILES_DIR" init https://github.com/Miautawn/test-dotfiles.git
 fi
 __log DEBUG "Updating & Applying System Configuration..."
 chezmoi update
 
-__log INFO "STEP 4. Publishing Update Script..."
+SETUP_GIT_URL=$(git -C "$SETUP_DIR" remote get-url origin)
+if [[ "$SETUP_GIT_URL" == https://github.com/* ]]; then
+    __log DEBUG "miautawn-setup found HTTPS remote. Switching to SSH..."
+
+    NEW_SETUP_GIT_URL="${SETUP_GIT_URL/https:\/\/github.com\//git@github.com:}"
+    git -C "$SETUP_DIR" remote set-url origin "$NEW_SETUP_GIT_URL"
+fi
+
+__log INFO "STEP 5. Publishing Update Script..."
 __log DEBUG "Symlinking 'miautawn-setup' to ~/.local/bin..."
 mkdir -p $USER_SCRIPTS_DIR
 ln -sf $SETUP_DIR/bin/miautawn-setup $USER_SCRIPTS_DIR/miautawn-setup
 if ! [[ ":$PATH:" == *":$USER_SCRIPTS_DIR:"* ]]; then
     __log DEBUG "You should consider adding $USER_SCRIPTS_DIR to your PATH!"
 fi
+
 
 __log INFO "All Done!"
 
