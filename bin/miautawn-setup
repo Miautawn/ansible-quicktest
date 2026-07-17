@@ -197,6 +197,14 @@ if [[ "$SETUP_GIT_URL" == https://github.com/* ]]; then
     git -C "$SETUP_DIR" remote set-url origin "$NEW_SETUP_GIT_URL"
 fi
 
+DOTFILE_GIT_URL=$(git -C "$DOTFILES_DIR" remote get-url origin)
+if [[ "$DOTFILE_GIT_URL" == https://github.com/* ]]; then
+    __log DEBUG "Chezmoi found HTTPS remote. Switching to SSH..."
+
+    NEW_DOTFILE_GIT_URL="${DOTFILE_GIT_URL/https:\/\/github.com\//git@github.com:}"
+    git -C "$DOTFILES_DIR" remote set-url origin "$NEW_DOTFILE_GIT_URL"
+fi
+
 __log INFO "STEP 5. Publishing Update Script..."
 __log DEBUG "Symlinking 'miautawn-setup' to ~/.local/bin..."
 mkdir -p $USER_SCRIPTS_DIR
