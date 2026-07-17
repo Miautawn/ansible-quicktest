@@ -2,6 +2,7 @@
 - name: "{{ ansible_facts['distribution'] }} | LOCKSCREEN | Install"
   community.general.pacman:
     name:
+      - playerctl # literally need to just pause music when locking
       - xss-lock
       - xsecurelock
     state: present

@@ -1,6 +1,8 @@
 ---
 - name: "{{ ansible_facts['distribution'] }} | XORG | Install"
   community.general.pacman:
-    name: xorg
+    name:
+      - xorg
+      - xorg-xinit
     state: present
   become: true

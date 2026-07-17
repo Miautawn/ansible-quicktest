@@ -26,6 +26,28 @@
   when: gpu_vendor == "AMD"
   become: true
 
+- name: "{{ ansible_facts['distribution'] }} | POST SETUP | Coppying ly login manager config"
+  ansible.builtin.copy:
+    dest: /etc/ly/config.ini
+    src: ly_config.ini
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | POST SETUP | Editing faillock.conf to increase incorrect password attempts"
+  ansible.builtin.lineinfile:
+    path: /etc/security/faillock.conf
+    regexp: '^(#\s*)?{{ current_rule.key }}\s*='
+    line: "{{ current_rule.key }} = {{ current_rule.value }}"
+    state: present
+  loop:
+    - { key: 'deny', value: '10' }
+    - { key: 'unlock_time', value: '60' }
+  loop_control:
+      loop_var: current_rule
+  become: true
+
 - name: "{{ ansible_facts['distribution'] }} | POST SETUP | Configuring touchpad tapping + natural scroll"
   ansible.builtin.copy:
     dest: /etc/X11/xorg.conf.d/30-touchpad.conf

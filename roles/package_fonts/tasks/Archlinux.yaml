@@ -1,5 +1,5 @@
 ---
-- name: "{{ ansible_facts['distribution'] }} | FONYS | Install"
+- name: "{{ ansible_facts['distribution'] }} | FONTS | Install"
   community.general.pacman:
     name:
       - noto-fonts-emoji

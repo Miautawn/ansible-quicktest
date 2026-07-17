@@ -6,3 +6,9 @@
       - bluez-utils
     state: present
   become: true
+
+- name: "{{ ansible_facts['distribution'] }} | BLUETOOTH | Enable bluetooth service"
+  ansible.builtin.service:
+    name: bluetooth
+    enabled: true
+  become: true

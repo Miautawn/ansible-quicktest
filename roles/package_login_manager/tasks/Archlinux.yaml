@@ -1,12 +1,20 @@
 ---
 - name: "{{ ansible_facts['distribution'] }} | LOGIN MANAGER | Install"
   community.general.pacman:
-    name: lemurs
+    name:
+      - ly
+      - xorg-xauth
     state: present
   become: true
 
-- name: "{{ ansible_facts['distribution'] }} | LOGIN MANAGER | Enabling lemur service"
+- name: "{{ ansible_facts['distribution'] }} | LOGIN MANAGER | Enable ly service"
   ansible.builtin.service:
-    name: lemurs
+    name: ly@tty1
     enabled: true
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | LOGIN MANAGER | Disable getty service"
+  ansible.builtin.service:
+    name: getty@tty1
+    enabled: false
   become: true
