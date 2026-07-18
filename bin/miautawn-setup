@@ -73,22 +73,22 @@ function arch_setup() {
 
     if ! pacman -Q git >/dev/null 2>&1; then
         __log DEBUG "Installing Git..."
-        __cmd "echo '$SUDO_PASS' | sudo -S pacman -S --noconfirm git"
+        echo '$SUDO_PASS' | sudo -S pacman -S --noconfirm git
     fi
 
     if ! pacman -Q ansible >/dev/null 2>&1; then
         __log DEBUG "Installing Ansible..."
-        __cmd "echo '$SUDO_PASS' | sudo -S pacman -S --noconfirm ansible"
+        echo '$SUDO_PASS' | sudo -S pacman -S --noconfirm ansible
     fi
 
     if ! pacman -Q python-watchdog >/dev/null 2>&1; then
         __log DEBUG "Installing Python-Watchdog..."
-        __cmd "echo '$SUDO_PASS' | sudo -S pacman -S --noconfirm python-watchdog"
+        echo '$SUDO_PASS' | sudo -S pacman -S --noconfirm python-watchdog
     fi
 
     if ! pacman -Q chezmoi >/dev/null 2>&1; then
         __log DEBUG "Installing Chezmoi..."
-        __cmd "echo '$SUDO_PASS' | sudo -S pacman -S --noconfirm chezmoi"
+        echo '$SUDO_PASS' | sudo -S pacman -S --noconfirm chezmoi
     fi
 }
 
