@@ -169,7 +169,7 @@ esac
 __log INFO "STEP 2. Replicating System Setup..."
 if ! [[ -d $SETUP_DIR ]]; then
     __log DEBUG "Cloning miautawn-setup repo..."
-    git clone --recurse-submodules https://github.com/Miautawn/ansible-quicktest $SETUP_DIR
+    git clone https://github.com/Miautawn/ansible-quicktest $SETUP_DIR
 else
     __log DEBUG "Updating miautawn-setup repo..."
     git -C $SETUP_DIR pull
