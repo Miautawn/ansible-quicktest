@@ -79,6 +79,8 @@
         - package_lockscreen
         - package_polybar
         - package_cli_stuff
+        - package_nvim
+        - package_vscode
         - package_yazi
         - package_git
         - package_feh
