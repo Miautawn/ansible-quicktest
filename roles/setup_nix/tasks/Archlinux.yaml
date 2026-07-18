@@ -10,6 +10,7 @@
     name: nix-daemon.service
     state: started
     enabled: true
+  become: true
 
 - name: "{{ ansible_facts['distribution'] }} | NIX SETUP | Enabling experimental nix syntax"
   ansible.builtin.lineinfile:
