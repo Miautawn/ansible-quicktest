@@ -55,10 +55,33 @@ LinuxOS_Work (LUKS)
     └── vmlinuz-linux
 ```
 
-Because of this layout + encryption, GRUB won't be able to automatically detect and chain different Arch installs, so we have to put some elbow greese to connect them.
+#### Archinstall
+When using `archinstall` scipt do the following steps:
+1. Do the setup and partitioning as usual - explicitly making an EFI partition (mounted on `/efi`) + the BTRFS partition with desired volumes.
+2. Mark the BTRFS partition to be encrypted with LUKS
+3. Choose GRUB bootloader. Choose the `removable` option. Disable UKI (unified kernel image). UKI's kinda go against of having bootfiles part of the snapshots.
+4. Prooceed
+5. If LUKS was used: **chroot** into the new environment (DO NOT REBOOT YET!)
+6. Tell grub to be able to decode the encrypted partition
+```
+In: /etc/default/grub
+GRUB_ENABLE_CRYPTODISK=y
+```
+7. Regenerate the GRUB config file in EFI partition (this will overwrite it meaning it's better to install the encrypted OS first)
+```
+grub-mkconfig -o /efi/grub/grub.cfg
+```
 
-#### LUKS Compatability
-By default, `archinstall` scipt uses `` for LUKS encryption. GRUB does not support it at the time, making 
+#### LUKS
+If you ever need to mount LUKS encrypted OS from outside, here are the steps:
+
+```
+sudo cryptsetup open /dev/XXX other_os
+sudo mount -t btrfs -o subvol=@ /dev/mapper/other_os /mnt
+
+sudo umount /mnt
+sudo cryptsetup close other_os
+```
 
 ### Subvolume Options
 `@`, `@home`, `@var*`, `@snapshot`
