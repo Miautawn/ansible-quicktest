@@ -75,7 +75,7 @@ GRUB_ENABLE_CRYPTODISK=y
 ```
 7. By default, archinstall will install GRUB to `/efi` itself. Tell it to install it to `/boot` with a unique name in EFI:
 ```
-grub-install --target=x86_64-efi --bootloader-id=YOUR_NAME --efi-directory=esp --boot-directory=/boot
+grub-install --target=x86_64-efi --bootloader-id=YOUR_NAME --efi-directory=/efi --boot-directory=/boot
 ```
 8. Remove the `/efi` grub install:
 ```
