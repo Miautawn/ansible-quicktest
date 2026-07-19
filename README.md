@@ -12,17 +12,18 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Miautawn/ansible-quickte
 ## BTRF Layout
 Here are the subvolumes that I use for my installs
 
-| Subvolume    | Mountpoint |
-| ------------ | ---------- |
-| @            | /          |
-| @home        | /home      |
-| @var_log     | /var/log   |
-| @var_cache   | /var/cache |
-| @var_tmp     | /var/tmp   |
-| @snapshots   | /.snapshots|
-| @games       | /home/Games|
+| Subvolume    | Mountpoint       |
+| ------------ | ---------------- |
+| @            | /                |
+| @home        | /home            |
+| @var_log     | /var/log         |
+| @var_cache   | /var/cache       |
+| @var_tmp     | /var/tmp         |
+| @snapshots   | /.snapshots      |
+| @games       | /home/$USER/Games|
 
-`EFI` partitioned ought to be mounted on `/efi` ([source](https://wiki.archlinux.org/title/EFI_system_partition#Typical_mount_points))
+`EFI` partition ought to be mounted on `/efi` ([source](https://wiki.archlinux.org/title/EFI_system_partition#Typical_mount_points))
+Bootloader: GRUB (because of independent LUKS decryption support + themes!)
 
 ### Subvolume Options
 `@`, `@home`, `@var*`, `@snapshot`
