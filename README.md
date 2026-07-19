@@ -25,6 +25,11 @@ Here are the subvolumes that I use for my installs
 `EFI` partition ought to be mounted on `/efi` ([source](https://wiki.archlinux.org/title/EFI_system_partition#Typical_mount_points))
 Bootloader: GRUB (because of independent LUKS decryption support + themes!)
 
+**NOTE**: when using `archinstall` you can create the @games subvolume directly by specifying fully rendered mountpoint e.g. `/home/miautawn/Games`. This however, will leave your /home/$USER directory created by root and owned by root - not a good time xD. To fix this, simply run this in your home directory:
+```
+sudo chown -R $USER: ~
+```
+
 ### Subvolume Options
 `@`, `@home`, `@var*`, `@snapshot`
 - **noatime**: stops the system from writing a new timestamp every time you open a file. This prevents unnecessary background writes. It significantly speeds up read-intensive tasks and reduces wear on your drive.
