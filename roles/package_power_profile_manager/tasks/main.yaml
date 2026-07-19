@@ -1,0 +1,7 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | POWER MANAGER | Looking for distro specific task..."
+  ansible.builtin.include_tasks: "{{ item }}"
+  with_first_found:
+    - files:
+        - "{{ role_path }}/tasks/{{ ansible_facts['distribution'] }}.yaml"
+      skip: true

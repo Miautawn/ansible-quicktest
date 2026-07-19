@@ -1,0 +1,31 @@
+---
+- name: "{{ ansible_facts['distribution'] }} | POWER MANAGER | Install"
+  community.general.pacman:
+    name:
+      - tlp
+    state: present
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | POWER MANAGER | Mask conflicting services"
+  ansible.builtin.service:
+    name: ' {{current_service}} '
+    masked: true
+  loop:
+    - systemd-rfkill.service
+    - systemd-rfkill.socket
+  loop_control:
+      loop_var: current_service
+  become: true
+
+- name: "{{ ansible_facts['distribution'] }} | POWER MANAGER | Mask power profile daemon service"
+  ansible.builtin.service:
+    name: power-profiles-daemon
+    masked: true
+  become: true
+  ignore_errors: true
+
+- name: "{{ ansible_facts['distribution'] }} | POWER MANAGER | Enabling TLP service"
+  ansible.builtin.service:
+    name: tlp.service
+    enabled: true
+  become: true

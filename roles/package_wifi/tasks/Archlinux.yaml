@@ -6,3 +6,9 @@
       - impala
     state: present
   become: true
+
+- name: "{{ ansible_facts['distribution'] }} | WIFI | Enable iwd service"
+  ansible.builtin.service:
+    name: iwd
+    enabled: true
+  become: true

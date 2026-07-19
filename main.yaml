@@ -101,6 +101,7 @@
       loop:
         - package_wifi
         - package_bluetooth
+        - package_power_profile_manager
         - package_brightness
         - package_powertop
       loop_control:
