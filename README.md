@@ -23,12 +23,42 @@ Here are the subvolumes that I use for my installs
 | @games       | /home/$USER/Games|
 
 `EFI` partition ought to be mounted on `/efi` ([source](https://wiki.archlinux.org/title/EFI_system_partition#Typical_mount_points))
-Bootloader: GRUB (because of independent LUKS decryption support + themes!)
 
 **NOTE**: when using `archinstall` you can create the @games subvolume directly by specifying fully rendered mountpoint e.g. `/home/miautawn/Games`. This however, will leave your /home/$USER directory created by root and owned by root - not a good time xD. To fix this, simply run this in your home directory:
 ```
 sudo chown -R $USER: ~
 ```
+
+### Bootloader Funtime
+Since we wish to use LUKS disk encryption, we kinda need to use `GRUB` because of it's abiliity to actually decrypt the encrypted `/boot`
+
+**NOTE**: In this setup, we write the GRUB directly to EFI, meaning that the EFI partition contains all the themes/configs for GRUB. We make this choice to allow our /boot files to be part of BTRFS snapshots (as otherwise you will have incomplete snapshots in the case of broken bootfiles). And because we will be using LUKS, we can't just have GRUB files be in the encrypted partition.
+
+Our setup assumes this partition layout after fresh install:
+```
+EFI
+└── grub
+    ├── grub.cfg
+    ├── themes
+    └── fonts
+
+LinuxOS_Gaming
+├── /efi (mounted EFI)
+└── /boot
+    ├── initramfs-linux.img
+    └── vmlinuz-linux
+
+LinuxOS_Work (LUKS)
+├── /efi (mounted EFI)
+└── /boot
+    ├── initramfs-linux.img
+    └── vmlinuz-linux
+```
+
+Because of this layout + encryption, GRUB won't be able to automatically detect and chain different Arch installs, so we have to put some elbow greese to connect them.
+
+#### LUKS Compatability
+By default, `archinstall` scipt uses `` for LUKS encryption. GRUB does not support it at the time, making 
 
 ### Subvolume Options
 `@`, `@home`, `@var*`, `@snapshot`
