@@ -32,44 +32,58 @@ sudo chown -R $USER: ~
 ### Bootloader Funtime
 Since we wish to use LUKS disk encryption, we kinda need to use `GRUB` because of it's abiliity to actually decrypt the encrypted `/boot`
 
-**NOTE**: In this setup, we write the GRUB directly to EFI, meaning that the EFI partition contains all the themes/configs for GRUB. We make this choice to allow our /boot files to be part of BTRFS snapshots (as otherwise you will have incomplete snapshots in the case of broken bootfiles). And because we will be using LUKS, we can't just have GRUB files be in the encrypted partition.
+**NOTE**: In this setup, we adopt "independent bootloaders" approach, whreby all OS'es will have their own bootloaders but we will have a primary one from which we will boot all others. This means that GRUB runtime files will be kept separately in each `/boot` of each OS install. This will allows us to keep bootloader itself part of snapshots together will linux bootfiles.
 
 Our setup assumes this partition layout after fresh install:
 ```
 EFI
-└── grub
-    ├── grub.cfg
-    ├── themes
-    └── fonts
+└── LinuxOS_Gaming
+    └── grubx64.efi
+└── LinuxOS_Work
+    └── grubx64.efi
 
 LinuxOS_Gaming
 ├── /efi (mounted EFI)
 └── /boot
     ├── initramfs-linux.img
-    └── vmlinuz-linux
+    ├── vmlinuz-linux
+    └── grub
+        ├── grub.cfg
+        └── ...
 
 LinuxOS_Work (LUKS)
 ├── /efi (mounted EFI)
 └── /boot
     ├── initramfs-linux.img
-    └── vmlinuz-linux
+    ├── vmlinuz-linux
+    └── grub
+        ├── grub.cfg
+        └── ...
 ```
 
 #### Archinstall
 When using `archinstall` scipt do the following steps:
 1. Do the setup and partitioning as usual - explicitly making an EFI partition (mounted on `/efi`) + the BTRFS partition with desired volumes.
 2. Mark the BTRFS partition to be encrypted with LUKS
-3. Choose GRUB bootloader. Choose the `removable` option. Disable UKI (unified kernel image). UKI's kinda go against of having bootfiles part of the snapshots.
+3. Choose GRUB bootloader. DO NOT choose the `removable` option. Disable UKI (unified kernel image). UKI's kinda go against of having bootfiles part of the snapshots.
 4. Prooceed
-5. If LUKS was used: **chroot** into the new environment (DO NOT REBOOT YET!)
-6. Tell grub to be able to decode the encrypted partition
+5. **chroot** into the new environment (DO NOT REBOOT YET!)
+6. If used LUKS: tell grub to be able to decode the encrypted partition:
 ```
 In: /etc/default/grub
 GRUB_ENABLE_CRYPTODISK=y
 ```
-7. Regenerate the GRUB config file in EFI partition (this will overwrite it meaning it's better to install the encrypted OS first)
+7. By default, archinstall will install GRUB to `/efi` itself. Tell it to install it to `/boot` with a unique name in EFI:
 ```
-grub-mkconfig -o /efi/grub/grub.cfg
+grub-install --target=x86_64-efi --bootloader-id=YOUR_NAME --efi-directory=esp --boot-directory=/boot
+```
+8. Remove the `/efi` grub install:
+```
+rm -rf /efi/grub
+```
+9. Regenerate the GRUB config file in `/boot`:
+```
+grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 #### LUKS
