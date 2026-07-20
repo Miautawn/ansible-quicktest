@@ -156,3 +156,6 @@ sudo cryptsetup close other_os
 #### Mic button is always on
 Fix is [here](https://wiki.archlinux.org/title/Lenovo_ThinkPad_T14_(AMD)_Gen_3#Mute_Mic_LED_always_on)
 
+#### IWD Fails to start / Needs Reboot
+If you find this problem and the `systemctl status iwd` shows something like `too many files open` it's kinda fake news as it's probably race condition where starts before wireless network card powers on. The fix is [here](https://wiki.archlinux.org/title/Iwd#Restarting_iwd.service_after_boot)
+
