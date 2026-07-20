@@ -87,6 +87,7 @@
         - package_kitty
         - package_xterm
         - package_firefox
+        - package_archiver
         - package_zen_browser
         - package_flameshot
         - package_mpv
