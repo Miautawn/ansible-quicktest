@@ -65,6 +65,14 @@
   when: device_type == "laptop"
   become: true
 
+- name: "{{ ansible_facts['distribution'] }} | POST SETUP | TLP enable wifi radio on boot"
+  ansible.builtin.lineinfile:
+    path: /etc/tlp.conf
+    regexp: '#DEVICES_TO_ENABLE_ON_STARTUP='
+    line: 'DEVICES_TO_ENABLE_ON_STARTUP="wifi"'
+    state: present
+  become: true
+
 # - name: "{{ ansible_facts['distribution'] }} | Configuring Nix GPU driver passthrough"
 #   ansible.builtin.copy:
 #     dest: /etc/tmpfiles.d/nix-opengl.conf

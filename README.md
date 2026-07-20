@@ -9,6 +9,18 @@ Optionally you can specify only specific tags to install as such:
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Miautawn/ansible-quicktest/master/bin/miautawn-setup)" -- --tags core,common,utils
 ```
 
+
+## Tests
+Run tests from the top-level project directory for the corresponding OS:
+```bash
+>> ./tests/arch-linux/run_tests.sh
+```
+
+```
+xdpyinfo | grep -B2 resolution
+xrdb -query | grep dpi
+``` 
+
 ## BTRF Layout
 Here are the subvolumes that I use for my installs
 
@@ -29,7 +41,20 @@ Here are the subvolumes that I use for my installs
 sudo chown -R $USER: ~
 ```
 
-### Bootloader Funtime
+### Subvolume Options
+`@`, `@home`, `@var*`, `@snapshot`
+- **noatime**: stops the system from writing a new timestamp every time you open a file. This prevents unnecessary background writes. It significantly speeds up read-intensive tasks and reduces wear on your drive.
+- **compress=zstd:3**: enables zstd compression on level 3 (default). Provides a great balance of speed and storage.
+- **ssd**: enables autodetection of SSD optimizations.
+- **space_cache=v2**: The free space cache greatly improves performance when reading block group free space into memory.
+
+`@games`
+- **noatime**: stops the system from writing a new timestamp every time you open a file. This prevents unnecessary background writes. It significantly speeds up read-intensive tasks and reduces wear on your drive.
+- **nodatacow**: explicitly disabled CoW and ZSTD Compression to reduce fragmentation induced by game updates.
+- **ssd**: enables autodetection of SSD optimizations.
+- **space_cache=v2**: The free space cache greatly improves performance when reading block group free space into memory.
+
+## Bootloader Funtime
 Since we wish to use LUKS disk encryption, we kinda need to use `GRUB` because of it's abiliity to actually decrypt the encrypted `/boot`
 
 **NOTE**: In this setup, we adopt "independent bootloaders" approach, whreby all OS'es will have their own bootloaders but we will have a primary one from which we will boot all others. This means that GRUB runtime files will be kept separately in each `/boot` of each OS install. This will allows us to keep bootloader itself part of snapshots together will linux bootfiles.
@@ -61,7 +86,7 @@ LinuxOS_Work (LUKS)
         └── ...
 ```
 
-#### Archinstall
+### Archinstall
 When using `archinstall` scipt do the following steps:
 1. Do the setup and partitioning as usual - explicitly making an EFI partition (mounted on `/efi`) + the BTRFS partition with desired volumes.
 2. Mark the BTRFS partition to be encrypted with LUKS
@@ -85,8 +110,34 @@ rm -rf /efi/grub
 ```
 grub-mkconfig -o /boot/grub/grub.cfg
 ```
+10. Grub should generate the booentry for this new install, but just in case - create it's own ([source](https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface#efibootmgr))
+```
+# ESP is on disk /dev/nvme0n1 and has partition number 1. The path to the EFI application relative to the root of the ESP is /EFI/YOUR_NAME/grubx64.efi.
+# So you would create the boot entry as follows:
 
-#### LUKS
+efibootmgr --create --disk /dev/nvme0n1 --part 1 --loader '\EFI\YOUR_NAME\grubx64.efi' --label 'YOUR NAME'
+```
+11. Finally, you can reference other OS'es grub install in your own GRUB menu for that sweet sweet switching!
+```
+In: /etc/grub.d/40_custom
+
+# THIS IS EXAMPLE FOR AN UNENCRYPTED DRIVE!!!
+# POINT TO IT's UUID found with `lsblk -f`
+
+menuentry "Switch to OTHER NAME" --class arch {
+    insmod btrfs
+
+    search --no-floppy --set=root --fs-uuid XXXX-YYYY-ZZZZ
+
+    configfile /@/boot/grub/grub.cfg
+}
+```
+12. Finally 2x, regenerate the Grub config file once more!
+```
+grub-mkconfig -o /boot/grub/grub.cfg
+```
+
+### LUKS
 If you ever need to mount LUKS encrypted OS from outside, here are the steps:
 
 ```
@@ -97,26 +148,11 @@ sudo umount /mnt
 sudo cryptsetup close other_os
 ```
 
-### Subvolume Options
-`@`, `@home`, `@var*`, `@snapshot`
-- **noatime**: stops the system from writing a new timestamp every time you open a file. This prevents unnecessary background writes. It significantly speeds up read-intensive tasks and reduces wear on your drive.
-- **compress=zstd:3**: enables zstd compression on level 3 (default). Provides a great balance of speed and storage.
-- **ssd**: enables autodetection of SSD optimizations.
-- **space_cache=v2**: The free space cache greatly improves performance when reading block group free space into memory.
 
-`@games`
-- **noatime**: stops the system from writing a new timestamp every time you open a file. This prevents unnecessary background writes. It significantly speeds up read-intensive tasks and reduces wear on your drive.
-- **nodatacow**: explicitly disabled CoW and ZSTD Compression to reduce fragmentation induced by game updates.
-- **ssd**: enables autodetection of SSD optimizations.
-- **space_cache=v2**: The free space cache greatly improves performance when reading block group free space into memory.
+## Device Quirks
 
-## Tests
-Run tests from the top-level project directory for the corresponding OS:
-```bash
->> ./tests/arch-linux/run_tests.sh
-```
+### ThinkPad P14s Gen 4
 
-```
-xdpyinfo | grep -B2 resolution
-xrdb -query | grep dpi
-``` 
+#### Mic button is always on
+Fix is [here](https://wiki.archlinux.org/title/Lenovo_ThinkPad_T14_(AMD)_Gen_3#Mute_Mic_LED_always_on)
+
