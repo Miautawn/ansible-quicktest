@@ -153,9 +153,24 @@ sudo cryptsetup close other_os
 
 ### ThinkPad P14s Gen 4
 
-#### Mic button is always on
+#### Mic button is always on / Mic is recognized but silent input
+Funilly enough the fix for both is the same:  
 Fix is [here](https://wiki.archlinux.org/title/Lenovo_ThinkPad_T14_(AMD)_Gen_3#Mute_Mic_LED_always_on)
 
 #### IWD Fails to start / Needs Reboot
 If you find this problem and the `systemctl status iwd` shows something like `too many files open` it's kinda fake news as it's probably race condition where starts before wireless network card powers on. The fix is [here](https://wiki.archlinux.org/title/Iwd#Restarting_iwd.service_after_boot)
 
+Pick the "absolute device" path unit (for internal wifi card that doesn't matter as the path won't change)
+(check the arch wiki template - it should match it perfectly)!
+```
+systemctl list-units --type=device | grep wlan0
+```
+
+Write to `/etc/systemd/system/iwd.service.d/override.conf`
+```
+[Unit]
+After=sys-XXXX-net-wlan0.device
+Wants=sys-XXXX-net-wlan0.device
+```
+
+Reboot!
